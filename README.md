@@ -6,8 +6,8 @@ This repository contains setup templates and configuration files for various app
 
 | Application | Description | Link |
 |-------------|-------------|------|
-| [MonaServer](https://github.com/lr101/MonaServer) | Backend server powering the Stick-It app | [/monaserver](./monaserver) |
-| Home Assistant | Open source home automation platform | [/homeassistant](./homeassistant) |
+| [MonaServer](https://github.com/lr101/MonaServer) | Backend server powering the Stick-It app | [MonaServer](./MonaServer) |
+| Home Assistant | Open source home automation platform | [homeassistant](./homeassistant) |
 
 ## Purpose
 
