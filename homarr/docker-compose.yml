@@ -1,0 +1,22 @@
+services:
+  homarr:
+    container_name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - ./configs:/app/data/configs
+      - ./icons:/app/public/icons
+      - ./data:/data
+    networks:
+      - frontend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.home.rule=Host(`home.thinkpad.lr-projects.de`)
+      - traefik.http.routers.home.entrypoints=websecure
+      - traefik.http.routers.home.tls=true
+      - traefik.http.routers.home.tls.certresolver=cloudflare
+      - traefik.http.services.home.loadbalancer.server.port=7575
+
+networks:
+  frontend:
+    external: true
