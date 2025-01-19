@@ -1,0 +1,53 @@
+services:
+  nextcloud:
+    image: nextcloud:latest
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html
+    networks:
+      - frontend
+      - backend-nextcloud
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.thinkpad.lr-projects.de`)
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.tls.certresolver=cloudflare
+    environment:
+      - MYSQL_HOST=database
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+      - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_HOST=redis
+    depends_on:
+      - database
+      - redis
+
+  database:
+    image: mariadb
+    restart: always
+    networks:
+      - backend-nextcloud
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+    volumes:
+      - database:/var/lib/mysql
+
+  redis:
+    networks:
+      - backend-nextcloud
+    image: redis
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+
+volumes:
+  nextcloud:
+  database:
+networks:
+  frontend:
+    external: true
+  backend-nextcloud:
