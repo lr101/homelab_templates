@@ -1,0 +1,27 @@
+services:
+  reverse-proxy:
+    image: traefik:v3.3
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file: .env
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.traefik-dash.rule=Host(`traefik.thinkpad.lr-projects.de`)
+      - traefik.http.routers.traefik-dash.entrypoints=websecure
+      - traefik.http.routers.traefik-dash.tls=true
+      - traefik.http.routers.traefik-dash.tls.certresolver=cloudflare
+      - traefik.http.routers.traefik-dash.service=api@internal
+      - traefik.http.services.api@internal.loadbalancer.server.port=8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./certs:/var/traefik/certs
+    restart: unless-stopped
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

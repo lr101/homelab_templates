@@ -1,0 +1,26 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+api:
+  dashboard: true
+  insecure: false
+entryPoints:
+  web:
+    address: :80
+  websecure:
+    address: :443
+providers:
+  docker:
+    exposedByDefault: false
+    endpoint: "unix:///var/run/docker.sock"
+certificatesResolvers:
+  cloudflare:
+    acme:
+      email: lukasr101@proton.me
+      storage: /var/traefik/certs/cloudflare-acme.json
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+        delayBeforeCheck: 0
