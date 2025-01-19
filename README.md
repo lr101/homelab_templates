@@ -8,6 +8,12 @@ This repository contains setup templates and configuration files for various app
 |-------------|-------------|------|
 | [MonaServer](https://github.com/lr101/MonaServer) | Backend server powering the Stick-It app | [MonaServer](./MonaServer) |
 | Home Assistant | Open source home automation platform | [homeassistant](./homeassistant) |
+| Bitwarden | Self-hosted password manager | [/bitwarden](./bitwarden) |
+| Nextcloud | Self-hosted file sync and collaboration platform | [/nextcloud](./nextcloud) |
+| Portainer | Docker container management UI | [/portainer](./portainer) |
+| Tempserver | Temperature monitoring and logging | [/tempserver](./tempserver) |
+| Traefik-Thinkpad | Traefik reverse proxy | [/traefik-thinkpad](./traefik-thinkpad) |
+| Logging | Influxdb, grafana, telegraf | [/logging](./logging) | 
 
 ## Purpose
 
