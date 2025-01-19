@@ -1,0 +1,16 @@
+services:
+  temp-server:
+    command: java -jar -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m app.jar
+    image: lrprojects/tempserver:1.0.0-SNAPSHOT
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+    env_file:
+      -  .env
+    networks:
+      - influxdb-network
+networks:
+  influxdb-network:
+    external: true
+  db:
+    external: true
