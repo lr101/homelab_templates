@@ -1,0 +1,80 @@
+services:
+  stick-it-server:
+    image: lrprojects/stick-it-server:0.0.10
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    networks:
+      - stick-it-network
+      - db
+      - influxdb-network
+      - frontend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.stick-it.rule=Host(`stick-it.thinkpad.lr-projects.de`)
+      - traefik.http.routers.stick-it.entrypoints=websecure
+      - traefik.http.routers.stick-it.tls=true
+      - traefik.http.routers.stick-it.tls.certresolver=cloudflare
+      - traefik.http.services.stick-it.loadbalancer.server.port=8082
+      - traefik.docker.network=frontend
+  minio:
+    image: minio/minio
+    container_name: minio_local
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - ./minio/data:/data                         # Mount the local directory for data storage
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: <MINIO_ROOT_PASSWORD>
+    restart: unless-stopped                      # Optional: Ensure the container restarts on failure or system restart
+    command: server /data --console-address ":9001"
+    networks:
+      - stick-it-network
+      - frontend
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.minio.rule=Host(`minio.thinkpad.lr-projects.de`)
+      - traefik.http.routers.minio.entrypoints=websecure
+      - traefik.http.routers.minio.tls=true
+      - traefik.http.routers.minio.tls.certresolver=cloudflare
+      - traefik.http.routers.minio.service=minio
+      - traefik.http.services.minio.loadbalancer.server.port=9000
+      - traefik.http.routers.minio-admin.rule=Host(`minio-admin.thinkpad.lr-projects.de`)
+      - traefik.http.routers.minio-admin.entrypoints=websecure
+      - traefik.http.routers.minio-admin.tls=true
+      - traefik.http.routers.minio-admin.tls.certresolver=cloudflare
+      - traefik.http.routers.minio-admin.service=minio-admin
+      - traefik.http.services.minio-admin.loadbalancer.server.port=9001
+
+  redis:
+    image: redis:8.0-M02
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    env_file:
+      - ./.env
+    networks:
+      - stick-it-network
+  db:
+    image: postgis/postgis:16-master
+    restart: unless-stopped
+    container_name: stick-it-db
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./backup:/backup
+    ports:
+      - 5432:5432
+    env_file:
+      - ./.env
+    networks:
+      - stick-it-network
+      
+networks:
+  influxdb-network:
+    external: true
+  stick-it-network:
+    external: false
+  frontend:
+    external: true
