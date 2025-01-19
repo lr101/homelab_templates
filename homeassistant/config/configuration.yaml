@@ -1,0 +1,134 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Configuration.yml entry for REST sensor
+rest:
+  - resource: "http://192.168.0.27:8080/sensors/28AJOIFJOIJ1"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600) | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Wohnzimmer"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/28AJOIFJOIJ2"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600) | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Humidity"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "%"
+
+  - resource: "http://192.168.0.27:8080/sensors/28ACA58A271901F2"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600) | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Pool"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/28505064271901D5"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600)  | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Buiten"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/2834F25A622001BC"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600)  | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Maxim1"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/28AE09BD622001DB"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600)  | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Maxim2"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/285E618931210327"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600) | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Slaapkamer deur"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/281C29AC3121031A"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600)  | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Slaapkamer raam"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/284F6DA93121031A"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600)  | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Kelder"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/28C529A9312103C9"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600)  | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Buiten2"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.27:8080/sensors/28D44D9631210379"
+    params:
+      date2: "{{ (as_timestamp(now()) - 600) | round }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Woonkamer"
+        value_template: "{{ value_json[0].entryValue }}"
+        unit_of_measurement: "°C"
