@@ -17,6 +17,15 @@ This repository contains setup templates and configuration files for various app
 | Homarr | Self-hosted dashboard | [/homarr](./homarr) | 
 
 
+## Homelab setup
+
+A wireguard server, running on a very cheap VPS with a public IP, is used to connect all devices in the homelab.
+This allows for (reverse) proxying of services running on the homelab to VPN clients. 
+This also allows for the nginx proxy, running on the public VPS, to expose specific services to the internet.
+
+![image](./images/setup.png)
+
+
 ## Purpose
 
 The goal of this repository is to:
