@@ -2,6 +2,8 @@ services:
   temp-server:
     command: java -jar -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m app.jar
     image: lrprojects/tempserver:1.0.0-SNAPSHOT
+    extra_hosts:
+      - host.docker.internal:host-gateway
     restart: unless-stopped
     ports:
       - 8081:8080
@@ -11,6 +13,4 @@ services:
       - influxdb-network
 networks:
   influxdb-network:
-    external: true
-  db:
     external: true
