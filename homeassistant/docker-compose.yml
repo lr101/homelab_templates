@@ -9,3 +9,10 @@ services:
     restart: unless-stopped
     privileged: true
     network_mode: host
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ha.rule=Host(`ha.thinkpad.lr-projects.de`)
+      - traefik.http.routers.ha.entrypoints=websecure
+      - traefik.http.routers.ha.tls=true
+      - traefik.http.routers.ha.tls.certresolver=cloudflare
+      - traefik.http.services.ha.loadbalancer.server.port=8123
