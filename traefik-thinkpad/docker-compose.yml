@@ -19,9 +19,15 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
       - ./certs:/var/traefik/certs
+      - ./logs:/logs
     restart: unless-stopped
     networks:
       - frontend
+      - influxdb-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 networks:
   frontend:
+    external: true
+  influxdb-network:
     external: true
