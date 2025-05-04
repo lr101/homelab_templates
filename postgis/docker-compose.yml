@@ -1,0 +1,28 @@
+services:
+ # stick-it-server:
+ #   container_name: stick-it-server
+ #   build: .
+ #   restart: unless-stopped
+ #   extra_hosts: 
+ #     - host.docker.internal:host-gateway
+ #   command: npm run start
+ #   ports:
+ #     - 3000:3000
+ #   env_file:
+ #    - ./.env
+  db:
+    image: postgis/postgis:16-master
+    restart: unless-stopped
+    container_name: stick-it-db
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./backup:/backup
+    ports:
+      - 5432:5432
+    env_file:
+      - ./.env
+    networks:
+      - db
+networks:
+  db:
+    external: true
