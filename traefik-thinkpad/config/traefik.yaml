@@ -27,7 +27,7 @@ certificatesResolvers:
 metrics:
   influxDB2:
     address: http://influxdb:8086
-    token: CBg6iIlbRpStYkF7_6-UNCu931geuvBMk3npW61reKZcLixAxhixydEpGWBv5Cg4pTnmAk-huku2bVCvt4Hx4w==
+    token:                       # TODO
     org: lr-projects
     bucket: traefik
     addEntryPointsLabels: true
