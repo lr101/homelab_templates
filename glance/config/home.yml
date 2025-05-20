@@ -4,7 +4,7 @@
       widgets:
 
         - type: weather
-          location: Bonn, Germany
+          location: Karlsruhe, Germany
           units: metric
           hour-format: 12h
 
@@ -90,8 +90,14 @@
             - title: Minio Console
               url: https://minio-admin.thinkpad.lr-projects.de
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/minio-light.png
-            - title: Blog
-              url: https://ghost.lr-projects.de/ghost
-              icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/ghost-light.png
+            - title: Portainer
+              url: https://portainer.thinkpad.lr-projects.de
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/portainer.png
+            - title: Immich
+              url: https://immich.medion.lr-projects.de
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/immich.svg
+            - title: Jellyfin
+              url: https://jellyfin.medion.lr-projects.de
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/jellyfin.svg
 
 
