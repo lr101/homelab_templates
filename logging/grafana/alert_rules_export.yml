@@ -1,0 +1,852 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: medion
+      folder: medion
+      interval: 5m
+      rules:
+        - uid: eda335bc-e0ad-4605-a930-c712876785a0
+          title: Medion Disk Space Root
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket: "telegraf_medion")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "disk")
+                      |> filter(fn: (r) => r["_field"] == "used_percent")
+                      |> filter(fn: (r) => r["device"] == "dm-0")
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 70
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 10m
+          annotations:
+            description: Alerts when free disk space of fedora-root over 70% usage
+            summary: Alerts when free disk space of fedora-root over 70% usage
+          isPaused: false
+        - uid: c14a19d5-7f1c-4de9-86f1-231f97f9cd2b
+          title: Medion Disk Space HDD
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket: "telegraf_medion")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "disk")
+                      |> filter(fn: (r) => r["_field"] == "used_percent")
+                      |> filter(fn: (r) => r["device"] == "sda1")
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 80
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 10m
+          annotations:
+            description: Alerts when free disk space of sdb1 over 80% usage
+            summary: Alerts when free disk space of sdb1 over 80% usage
+          isPaused: false
+        - uid: ba6c35a1-6a66-48d4-b840-15b7827b5955
+          title: Medion average RAM
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket: "telegraf_medion")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "mem")
+                      |> filter(fn: (r) => r["_field"] == "used_percent")
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 70
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 20m
+          annotations:
+            description: Alerts when RAM usage (in %) reaches an average of 70% four times in 20minutes
+            summary: Alerts when RAM usage (in %) reaches an average of 70% four times in 20minutes
+          isPaused: false
+        - uid: ad5b5089-f8b7-4ece-945d-e38b1dd2fae2
+          title: Monthly Backup Detected
+          condition: E
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 3600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket: "telegraf_medion")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "disk")
+                      |> filter(fn: (r) => r["_field"] == "used_percent")
+                      |> filter(fn: (r) => r["device"] == "sda1")
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 3600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: min
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 3600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: max
+                refId: C
+                type: reduce
+            - refId: D
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: $C - $B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: D
+                type: math
+            - refId: E
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 2
+                            - 0
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: D
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: E
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1h
+          annotations:
+            description: Alert when HDD disk space does not increase by 2%. This rule should only be executed in the first hour. of the first day of the month to detect if a backup send > 16GB of data.
+            summary: Alert when no backup data was detected.
+          labels:
+            monthly: "1"
+          isPaused: false
+    - orgId: 1
+      name: ionos
+      folder: ionos
+      interval: 5m
+      rules:
+        - uid: bd8367d0-c02f-48bf-8e53-56626441278b
+          title: Ionos Disk Space
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket: "telegraf_ionos")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "disk")
+                      |> filter(fn: (r) => r["_field"] == "free")
+                      |> filter(fn: (r) => r["device"] == "vda1")
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1e+09
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 10m
+          annotations:
+            description: Alerts when free disk space of vda1 is below 1.5 GB
+            summary: Alerts when free disk space of vda1 is below 1.5 GB
+          isPaused: false
+        - uid: cdbf664e-a501-4753-9eea-9cdcdcead2cd
+          title: Ionos Active Requests
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket: "telegraf_ionos")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "nginx")
+                      |> filter(fn: (r) => r["_field"] == "active")
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 50
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 10m
+          annotations:
+            description: Alerts when number of active requests exceeds an average of 50
+            summary: Alerts when number of active requests exceeds an average of 50
+          isPaused: false
+        - uid: dec1cb4e-63f1-43d9-bb34-cc9ac6f7cdac
+          title: Ionos Failed TCP Request
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket:  "telegraf_ionos")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "nstat")
+                      |> filter(fn: (r) => r["_field"] == "TcpAttemptFails")
+                      |> derivative(unit: 1s, nonNegative: true)
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 5
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 10m
+          annotations:
+            description: Alerts when number of failed tcp request exceeds an average of 5/minute
+            summary: Alerts when number of failed tcp request exceeds an average of 5/minute
+          isPaused: false
+    - orgId: 1
+      name: thinkpad
+      folder: thinkpad
+      interval: 5m
+      rules:
+        - uid: bd1ee850-9944-480b-9930-7c61c6a18355
+          title: Thinkpad Disk Space
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket: "telegraf")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "disk")
+                      |> filter(fn: (r) => r["_field"] == "free")
+                      |> filter(fn: (r) => r["device"] == "sda1")
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1e+10
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 20m
+          annotations:
+            description: Alerts when free disk space of sda1 is below 10 GB
+            summary: Alerts when free disk space of sda1 is below 10 GB
+          isPaused: false
+        - uid: fd9e1a4a-f073-48e2-b13c-80d7cc34277b
+          title: Thinkpad average RAM
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c8a9acb8-aee0-4e4e-8ab3-e54078589959
+              model:
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                query: |-
+                    from(bucket: "telegraf")
+                      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                      |> filter(fn: (r) => r["_measurement"] == "mem")
+                      |> filter(fn: (r) => r["_field"] == "used_percent")
+                      |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                      |> yield(name: "mean")
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 75
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 20m
+          annotations:
+            description: Alerts when RAM usage (in %) reaches an average of 75% four times in 20minutes
+            summary: Alerts when RAM usage (in %) reaches an average of 75% four times in 20minutes
+          isPaused: false
