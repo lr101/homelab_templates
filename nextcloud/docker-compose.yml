@@ -44,24 +44,28 @@ services:
       - 8.8.8.8
 
   database:
-    image: mariadb:11.4
+    image: mariadb:lts
     restart: always
     networks:
       - backend-nextcloud
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=rootpassword
       - MYSQL_USER=nextcloud
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_PASSWORD=nextcloud
       - MYSQL_DATABASE=nextcloud
     volumes:
       - database:/var/lib/mysql
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
   redis:
     networks:
       - backend-nextcloud
     image: redis
     restart: always
-    command: redis-server --requirepass ${REDIS_PASSWORD}
+    command: redis-server --requirepass redis
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
 volumes:
   nextcloud:

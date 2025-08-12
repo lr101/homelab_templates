@@ -9,13 +9,13 @@ This repository contains setup templates and configuration files for various app
 | Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution |
 |---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|
 | Bitwarden     | Password manager                    | Thinkpad | bitwarden.lr-projects.de | ✅              | `cron`              |
-| Diun          | Docker image update notifier        | Thinkpad | -      |               | `manual`              |
-| Watchtower    | Docker image updater        | Thinkpad | -      |               | `manual`              |
+| Diun          | Docker image update notifier        | Thinkpad | -      |  -             | `manual`              |
+| Watchtower    | Docker image updater        | Thinkpad | -      | -              | `manual`              |
 | Glance        | System monitoring dashboard         | Thinkpad | home.lr-projects.de    | -               | `watchtower :latest`              |
-| Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de |           | `watchtower :stable`              |
+| Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de | -          | `watchtower :stable`              |
 | InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌              | `watchtower :2.6-ubuntu`    
 | Grafana      | Alerting and montoring of metric data                | Thinkpad | grafana.thinkpad.lr-projects.de  | ❌              | `watchtower :latest` 
-| Telegraf      | Metric collector                | Thinkpad | -  | ❌              | `-`                 |
+| Telegraf      | Metric collector                | Thinkpad | -  | -              | `watchtower :1.31-alpine`                 |
 | Nextcloud     | File sharing and collaboration      | Thinkpad | nextcloud.lr-projects.de | ✅              | `watchtower :latest`               |
 | Nextcloud (MariaDB)     | Nextcloud database      | Thinkpad | - | -              | `watchtower :lts`               |
 | Nextcloud (Redis)     | Nextcloud in-memory db      | Thinkpad | - | -              | `watchtower :latest`               |
