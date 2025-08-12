@@ -1,66 +1,79 @@
 services:
-  stick-it-server:
-    image: lrprojects/stick-it-server:latest
-    container_name: stick-it-server
+  influxdb:
+    image: influxdb:2.6-alpine
     restart: unless-stopped
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${DOCKER_INFLUXDB_INIT_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: lr-projects
+      DOCKER_INFLUXDB_INIT_BUCKET: home
     volumes:
-      - ./firebase-toke.json:/app/firebase-token.json
-    env_file:
-      - ./.env
+      - ./influx/influx_data:/var/lib/influxdb2
+      - ./influx/influx_config:/etc/influxdb2
     networks:
-      - stick-it-network
-      - db
       - influxdb-network
       - frontend
     labels:
       - traefik.enable=true
-      - traefik.http.routers.stick-it.rule=Host(`stick-it.thinkpad.lr-projects.de`)
-      - traefik.http.routers.stick-it.entrypoints=websecure
-      - traefik.http.routers.stick-it.tls=true
-      - traefik.http.routers.stick-it.tls.certresolver=cloudflare
-      - traefik.http.services.stick-it.loadbalancer.server.port=8082
-      - traefik.docker.network=frontend
-    depends_on:
-      - minio
+      - traefik.http.routers.influx.rule=Host(`influx.thinkpad.lr-projects.de`)
+      - traefik.http.routers.influx.entrypoints=websecure
+      - traefik.http.routers.influx.tls=true
+      - traefik.http.routers.influx.tls.certresolver=cloudflare
+      - traefik.http.services.influx.loadbalancer.server.port=8086
+      - "com.centurylinklabs.watchtower.enable=true"
 
-  minio:
-    image: minio/minio
-    container_name: minio_local
-    ports:
-      - 9000:9000
-      - 9001:9001
-    volumes:
-      - ./minio/data:/data                         # Mount the local directory for data storage
+  telegraf:
+    image: telegraf:1.31-alpine
+    restart: unless-stopped
+    user: telegraf:998
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: <MINIO_ROOT_PASSWORD>
-    restart: unless-stopped                      # Optional: Ensure the container restarts on failure or system restart
-    command: server /data --console-address ":9001"
+      - HOST_ETC=/hostfs/etc
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_MOUNT_PREFIX=/hostfs
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /:/hostfs:ro
+      - /etc:/hostfs/etc:ro
+      - /proc:/hostfs/proc:ro
+      - /sys:/hostfs/sys:ro
+      - /var/run/utmp:/var/run/utmp:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /dev:/dev:ro
+    depends_on:
+      - influxdb
     networks:
-      - stick-it-network
+      - influxdb-network
+
+  grafana:
+    image: grafana/grafana:latest
+    user: "0"
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+      - GF_SERVER_ROOT_URL=https://grafana.thinkpad.lr-projects.de
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - ./grafana-config/grafana.ini:/etc/grafana/grafana.ini
+    depends_on:
+      - influxdb
+    networks:
+      - influxdb-network
       - frontend
     labels:
       - traefik.enable=true
-      - traefik.docker.network=frontend
-      - traefik.http.routers.minio.rule=Host(`minio.thinkpad.lr-projects.de`)
-      - traefik.http.routers.minio.entrypoints=websecure
-      - traefik.http.routers.minio.tls=true
-      - traefik.http.routers.minio.tls.certresolver=cloudflare
-      - traefik.http.routers.minio.service=minio
-      - traefik.http.services.minio.loadbalancer.server.port=9000
-      - traefik.http.routers.minio-admin.rule=Host(`minio-admin.thinkpad.lr-projects.de`)
-      - traefik.http.routers.minio-admin.entrypoints=websecure
-      - traefik.http.routers.minio-admin.tls=true
-      - traefik.http.routers.minio-admin.tls.certresolver=cloudflare
-      - traefik.http.routers.minio-admin.service=minio-admin
-      - traefik.http.services.minio-admin.loadbalancer.server.port=9001
-      
+      - traefik.http.routers.grafana.rule=Host(`grafana.thinkpad.lr-projects.de`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls=true
+      - traefik.http.routers.grafana.tls.certresolver=cloudflare
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+
 networks:
   influxdb-network:
-    external: true
-  stick-it-network:
-    external: false
-  db:
     external: true
   frontend:
     external: true

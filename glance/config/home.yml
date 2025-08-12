@@ -8,13 +8,6 @@
           units: metric
           hour-format: 12h
 
-        - type: dns-stats
-          service: pihole-v6
-          url: https://pihole.ionos.lr-projects.de
-          username: admin
-          password: ${PIHOLE_PSW}
-
-        
         - type: bookmarks
           groups:
             - links:
@@ -70,10 +63,13 @@
               url: https://grafana.thinkpad.lr-projects.de
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/grafana.svg
             - title: Home Assistant
-              url: http://10.217.236.3:8123
+              url: https://ha.thinkpad.lr-projects.de
               icon: https://cdn.jsdelivr.net/gh/loganmarchione/homelab-svg-assets/assets/homeassistant.svg
-            - title: Pi-Hole
+            - title: Pi-Hole Ionos (VPN)
               url: https://pihole.ionos.lr-projects.de/admin/login
+              icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/pi-hole.svg
+            - title: Pi-Hole Medion (Home Network)
+              url: https://pi-hole.medion.lr-projects.de/admin/login
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/pi-hole.svg
             - title: Nginx-UI
               url: https://nginx.ionos.lr-projects.de
@@ -81,8 +77,11 @@
             - title: InfluxDB
               url: https://influx.thinkpad.lr-projects.de
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/influxdb.svg
-            - title: Traefik Dashboard
+            - title: Traefik Dashboard (Thinkpad)
               url: https://traefik.thinkpad.lr-projects.de/dashboard/#
+              icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/traefik-proxy.svg
+            - title: Traefik Dashboard (Medion)
+              url: https://traefik.medion.lr-projects.de/dashboard/#
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/traefik-proxy.svg
             - title: Nextcloud
               url: https://nextcloud.thinkpad.lr-projects.de/login
@@ -99,5 +98,9 @@
             - title: Jellyfin
               url: https://jellyfin.medion.lr-projects.de
               icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/jellyfin.svg
-
-
+            - title: Temppi
+              url: https://temppi.thinkpad.lr-projects.de/?
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/raspberry-pi-light.svg
+            - title: Pocket ID
+              url: https://sso.medion.lr-projects.de
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/pocket-id-light.svg

@@ -1,7 +1,7 @@
 services:
   glance:
     container_name: glance
-    image: glanceapp/glance
+    image: glanceapp/glance:latest
     restart: unless-stopped
     volumes:
       - ./config:/app/config
@@ -21,6 +21,8 @@ services:
       - traefik.http.routers.home.tls=true
       - traefik.http.routers.home.tls.certresolver=cloudflare
       - traefik.http.services.home.loadbalancer.server.port=8080
+      - traefik.docker.network=frontend
+      - com.centurylinklabs.watchtower.enable=true
 
 networks:
   frontend:

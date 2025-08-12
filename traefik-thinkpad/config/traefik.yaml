@@ -24,12 +24,3 @@ certificatesResolvers:
           - "1.1.1.1:53"
           - "8.8.8.8:53"
         delayBeforeCheck: 0
-metrics:
-  influxDB2:
-    address: http://influxdb:8086
-    token:                       # TODO
-    org: lr-projects
-    bucket: traefik
-    addEntryPointsLabels: true
-    additionalLabels:
-      host: thinkpad.lr-projects.de

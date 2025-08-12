@@ -4,18 +4,25 @@ This repository contains setup templates and configuration files for various app
 
 ## Applications
 
-| Application | Description | Link |
-|-------------|-------------|------|
-| [MonaServer](https://github.com/lr101/MonaServer) | Backend server powering the Stick-It app | [/monaserver](./MonaServer) |
-| Home Assistant | Open source home automation platform | [/homeassistant](./homeassistant) |
-| Bitwarden | Self-hosted password manager | [/bitwarden](./bitwarden) |
-| Nextcloud | Self-hosted file sync and collaboration platform | [/nextcloud](./nextcloud) |
-| Portainer | Docker container management UI | [/portainer](./portainer) |
-| Tempserver | Temperature monitoring and logging | [/tempserver](./tempserver) |
-| Traefik-Thinkpad | Traefik reverse proxy | [/traefik-thinkpad](./traefik-thinkpad) |
-| Logging | Influxdb, grafana, telegraf | [/logging](./logging) | 
-| Homarr | Self-hosted dashboard | [/homarr](./homarr) | 
+### Thinkpad
 
+| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution |
+|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|
+| Bitwarden     | Password manager                    | Thinkpad | bitwarden.lr-projects.de | ✅              | `cron`              |
+| Diun          | Docker image update notifier        | Thinkpad | -      |               | `manual`              |
+| Watchtower    | Docker image updater        | Thinkpad | -      |               | `manual`              |
+| Glance        | System monitoring dashboard         | Thinkpad | home.lr-projects.de    | -               | `watchtower :latest`              |
+| Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de |           | `watchtower :stable`              |
+| InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌              | `watchtower :2.6-ubuntu`    
+| Grafana      | Alerting and montoring of metric data                | Thinkpad | grafana.thinkpad.lr-projects.de  | ❌              | `watchtower :latest` 
+| Telegraf      | Metric collector                | Thinkpad | -  | ❌              | `-`                 |
+| Nextcloud     | File sharing and collaboration      | Thinkpad | nextcloud.lr-projects.de | ✅              | `watchtower :latest`               |
+| Nextcloud (MariaDB)     | Nextcloud database      | Thinkpad | - | -              | `watchtower :lts`               |
+| Nextcloud (Redis)     | Nextcloud in-memory db      | Thinkpad | - | -              | `watchtower :latest`               |
+| Portainer     | Docker management UI                | Thinkpad | portainer.thinkpad.lr-projects.de |  -             | `watchtower :latest`              |
+| Monaserver       | Stick It backend                 | Thinkpad | stick-it.lr-projects.de   | ✅              | `manual`              |
+| Monaserver (Postgis)      | Stick It postgis database                 | Thinkpad | -   | ✅              | `manual`              |
+| Monaserver (Minio)      | Stick It image bucket                 | Thinkpad | minio.thinkpad.lr-projects.de   | ✅              | `manual`              |
 
 ## Homelab setup
 

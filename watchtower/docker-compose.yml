@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      # Only act on containers with this label
+      WATCHTOWER_LABEL_ENABLE: "true"
+      
+      # Schedule: every night at 03:00
+      WATCHTOWER_SCHEDULE: "0 0 3 * * *"
+
+
+      # Remove old images after updating
+      WATCHTOWER_CLEANUP: "true"
+
+      # Send notification if major update is available
+      WATCHTOWER_NOTIFICATIONS: "email"
+      WATCHTOWER_NOTIFICATION_EMAIL_FROM: lr.dev.projects@gmail.com
+      WATCHTOWER_NOTIFICATION_EMAIL_TO: lukasr101@proton.me
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER: smtp.gmail.com
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT: 587
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: lr.dev.projects@gmail.com
+      WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD: <TODO>
+      WATCHTOWER_NOTIFICATION_EMAIL_SUBJECTTAG: "[Watchtower]"
+      WATCHTOWER_NOTIFICATION_LEVEL: "info"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
