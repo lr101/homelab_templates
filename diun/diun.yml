@@ -1,0 +1,22 @@
+# ./diun.yml
+
+watch:
+  workers: 20
+  schedule: "* 4 * * *"
+
+providers:
+  docker:
+    watchByDefault: true
+
+
+notif:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    ssl: false
+    username: lr.dev.projects@gmail.com
+    from: lr.dev.projects@gmail.com
+    password: <TODO>
+    insecureSkipVerify: false
+    to:
+      - lukasr101@proton.me
