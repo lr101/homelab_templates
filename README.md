@@ -43,7 +43,7 @@ This repository contains setup templates and configuration files for various app
 ### Ionos
 
 | Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution | SSO Integration |
-|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|
+|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|-----------------|
 | Nginx-UI      | Reverse proxy (facing the internet)           | Ionos | nginx-ui.ionos.lr-projects.de |  ❌ (manually in this repo)            | ``              | ? |
 | Pi-Hole       | DNS for vpn network         | Ionos | pi-hole.ionos.lr-projects.de      |  ❌             |               | ? |
 | Telegraf      | Metric collector                | Ionos | -  | -              |                 | - |
