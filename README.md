@@ -6,48 +6,47 @@ This repository contains setup templates and configuration files for various app
 
 ### Thinkpad
 
-| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution |
-|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|
-| Bitwarden     | Password manager                    | Thinkpad | bitwarden.lr-projects.de | ✅              | `cron`              |
-| Diun          | Docker image update notifier        | Thinkpad | -      |  -             | `manual`              |
-| Watchtower    | Docker image updater        | Thinkpad | -      | -              | `manual`              |
-| Glance        | System monitoring dashboard         | Thinkpad | home.lr-projects.de    | -               | `watchtower :latest`              |
-| Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de | -          | `watchtower :stable`              |
-| InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌              | `watchtower :2.6-ubuntu`    
-| Grafana      | Alerting and montoring of metric data                | Thinkpad | grafana.thinkpad.lr-projects.de  | ❌ (manually in this repo)             | `watchtower :latest` 
-| Telegraf      | Metric collector                | Thinkpad | -  | -              | `watchtower :1.31-alpine`                 |
-| Nextcloud     | File sharing and collaboration      | Thinkpad | nextcloud.lr-projects.de | ✅              | `watchtower :latest`               |
-| Nextcloud (MariaDB)     | Nextcloud database      | Thinkpad | - | -              | `watchtower :lts`               |
-| Nextcloud (Redis)     | Nextcloud in-memory db      | Thinkpad | - | -              | `watchtower :latest`               |
-| Portainer     | Docker management UI                | Thinkpad | portainer.thinkpad.lr-projects.de |  -             | `watchtower :latest`              |
-| Monaserver       | Stick It backend                 | Thinkpad | stick-it.lr-projects.de   | ✅              | `manual`              |
-| Monaserver (Postgis)      | Stick It postgis database                 | Thinkpad | -   | ✅              | `manual`              |
-| Monaserver (Minio)      | Stick It image bucket                 | Thinkpad | minio.thinkpad.lr-projects.de   | ✅              | `manual`              |
-| Traefik      | Reverse Proxy (with https)                 | Thinkpad | traefik.thinkpad.lr-projects.de   | -              | `watchtower :v3` |
-| Portfolio      | Homepage of lr-projects                 | Thinkpad | lr-projects.de   | -              | `manual` |
-| Stick-It Homepage      | Landing page of the Stick-It app| Thinkpad | stick-it-map.lr-projects.de   | -              | `manual` |
+| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution | SSO Integration |
+|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|------------------|
+| Bitwarden     | Password manager                    | Thinkpad | bitwarden.lr-projects.de | ✅              | `cron`              | must be standalone |
+| Diun          | Docker image update notifier        | Thinkpad | -      |  -             | `manual`              | - |
+| Watchtower    | Docker image updater        | Thinkpad | -      | -              | `manual`              | - |
+| Glance        | System monitoring dashboard         | Thinkpad | home.lr-projects.de    | -               | `watchtower :latest`              | ? |
+| Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de | -          | `watchtower :stable`              | ✅ |
+| InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌              | `watchtower :2.6-ubuntu`    | ?|
+| Grafana      | Alerting and montoring of metric data                | Thinkpad | grafana.thinkpad.lr-projects.de  | ❌ (manually in this repo)             | `watchtower :latest` | ✅ | 
+| Telegraf      | Metric collector                | Thinkpad | -  | -              | `watchtower :1.31-alpine`                 | - |
+| Nextcloud     | File sharing and collaboration      | Thinkpad | nextcloud.lr-projects.de | ✅              | `watchtower :latest`               | ✅ |
+| Nextcloud (MariaDB)     | Nextcloud database      | Thinkpad | - | -              | `watchtower :lts`               | - |
+| Nextcloud (Redis)     | Nextcloud in-memory db      | Thinkpad | - | -              | `watchtower :latest`               | - |
+| Monaserver       | Stick It backend                 | Thinkpad | stick-it.lr-projects.de   | ✅              | `manual`              | - |
+| Monaserver (Postgis)      | Stick It postgis database                 | Thinkpad | -   | ✅              | `manual`              | - |
+| Monaserver (Minio)      | Stick It image bucket                 | Thinkpad | minio.thinkpad.lr-projects.de   | ✅              | `manual`              | ? |
+| Traefik      | Reverse Proxy (with https)                 | Thinkpad | traefik.thinkpad.lr-projects.de   | -              | `watchtower :v3` | ? |
+| Portfolio      | Homepage of lr-projects                 | Thinkpad | lr-projects.de   | -              | `manual` | - |
+| Stick-It Homepage      | Landing page of the Stick-It app| Thinkpad | stick-it-map.lr-projects.de   | -              | `manual` | - |
 
 
 ### Medion
 
-| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution |
-|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|
-| Immich           | Image storage | Medion | immich.medion.lr-projects.de |  ❌             | ``              |
-| Jellyfin         | Movie storage | Medion | jellyfin.medion.lr-projects.de      |  ❌             |               |
-| Pocket-ID        | SSO solution         | Medion | sso.medion.lr-projects.de      |  ❌             |               |
-| Pi-Hole          | DNS for home network         | Medion | pihole.medion.lr-projects.de      |  ❌             |               |
-| Traefik      | Reverse Proxy (with https)                 | Medion | traefik.medion.lr-projects.de   | -              |  |
-| Diun          | Docker image update notifier        | Medion | -      |  -             | `manual`              |
-| Telegraf      | Metric collector                | Medion | -  | -              |                 |
+| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution | SSO Integration |
+|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|-----------------|
+| Immich           | Image storage | Medion | immich.medion.lr-projects.de |  ❌             | ``              | ✅ |
+| Jellyfin         | Movie storage | Medion | jellyfin.medion.lr-projects.de      |  ❌             |               | ✅ |
+| Pocket-ID        | SSO solution         | Medion | sso.medion.lr-projects.de      |  ❌             |               | ✅ |
+| Pi-Hole          | DNS for home network         | Medion | pihole.medion.lr-projects.de      |  ❌             |               | ? |
+| Traefik      | Reverse Proxy (with https)                 | Medion | traefik.medion.lr-projects.de   | -              |  | ? |
+| Diun          | Docker image update notifier        | Medion | -      |  -             | `manual`              | - |
+| Telegraf      | Metric collector                | Medion | -  | -              |                 | - |
 
 
 ### Ionos
 
-| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution |
+| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution | SSO Integration |
 |---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|
-| Nginx-UI      | Reverse proxy (facing the internet)           | Ionos | nginx-ui.ionos.lr-projects.de |  ❌ (manually in this repo)            | ``              |
-| Pi-Hole       | DNS for vpn network         | Ionos | pi-hole.ionos.lr-projects.de      |  ❌             |               |
-| Telegraf      | Metric collector                | Ionos | -  | -              |                 |
+| Nginx-UI      | Reverse proxy (facing the internet)           | Ionos | nginx-ui.ionos.lr-projects.de |  ❌ (manually in this repo)            | ``              | ? |
+| Pi-Hole       | DNS for vpn network         | Ionos | pi-hole.ionos.lr-projects.de      |  ❌             |               | ? |
+| Telegraf      | Metric collector                | Ionos | -  | -              |                 | - |
 
 ## Homelab setup
 
