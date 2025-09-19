@@ -35,7 +35,7 @@ This repository contains setup templates and configuration files for various app
 | Jellyfin         | Movie storage | Medion | jellyfin.medion.lr-projects.de      |  ❌             |               | ✅ |
 | Pocket-ID        | SSO solution         | Medion | sso.medion.lr-projects.de      |  ❌             |               | ✅ |
 | Pi-Hole          | DNS for home network         | Medion | pihole.medion.lr-projects.de      |  ❌             |               | ? |
-| Traefik      | Reverse Proxy (with https)                 | Medion | traefik.medion.lr-projects.de   | -              |  | ? |
+| Traefik      | Reverse Proxy (with https)                 | Medion | traefik.medion.lr-projects.de   | -              |  | ✅ |
 | Diun          | Docker image update notifier        | Medion | -      |  -             | `manual`              | - |
 | Telegraf      | Metric collector                | Medion | -  | -              |                 | - |
 
