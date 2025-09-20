@@ -11,9 +11,9 @@ This repository contains setup templates and configuration files for various app
 | Bitwarden     | Password manager                    | Thinkpad | bitwarden.lr-projects.de | ✅              | `cron`              | must be standalone |
 | Diun          | Docker image update notifier        | Thinkpad | -      |  -             | `manual`              | - |
 | Watchtower    | Docker image updater        | Thinkpad | -      | -              | `manual`              | - |
-| Glance        | System monitoring dashboard         | Thinkpad | home.lr-projects.de    | -               | `watchtower :latest`              | ? |
+| Glance        | System monitoring dashboard         | Thinkpad | home.lr-projects.de    | -               | `watchtower :latest`              | - |
 | Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de | -          | `watchtower :stable`              | ✅ |
-| InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌              | `watchtower :2.6-ubuntu`    | ?|
+| InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌ (dont really need) | `watchtower :2.6-ubuntu`    | ❌ (community edition not possible)|
 | Grafana      | Alerting and montoring of metric data                | Thinkpad | grafana.thinkpad.lr-projects.de  | ❌ (manually in this repo)             | `watchtower :latest` | ✅ | 
 | Telegraf      | Metric collector                | Thinkpad | -  | -              | `watchtower :1.31-alpine`                 | - |
 | Nextcloud     | File sharing and collaboration      | Thinkpad | nextcloud.lr-projects.de | ✅              | `watchtower :latest`               | ✅ |
@@ -21,8 +21,8 @@ This repository contains setup templates and configuration files for various app
 | Nextcloud (Redis)     | Nextcloud in-memory db      | Thinkpad | - | -              | `watchtower :latest`               | - |
 | Monaserver       | Stick It backend                 | Thinkpad | stick-it.lr-projects.de   | ✅              | `manual`              | - |
 | Monaserver (Postgis)      | Stick It postgis database                 | Thinkpad | -   | ✅              | `manual`              | - |
-| Monaserver (Minio)      | Stick It image bucket                 | Thinkpad | minio.thinkpad.lr-projects.de   | ✅              | `manual`              | ? |
-| Traefik      | Reverse Proxy (with https)                 | Thinkpad | traefik.thinkpad.lr-projects.de   | -              | `watchtower :v3` | ? |
+| Monaserver (Minio)      | Stick It image bucket                 | Thinkpad | minio.thinkpad.lr-projects.de   | ✅              | `manual`              | ❌ (community edition not possible) |
+| Traefik      | Reverse Proxy (with https)                 | Thinkpad | traefik.thinkpad.lr-projects.de   | -              | `watchtower :v3` | ✅  |
 | Portfolio      | Homepage of lr-projects                 | Thinkpad | lr-projects.de   | -              | `manual` | - |
 | Stick-It Homepage      | Landing page of the Stick-It app| Thinkpad | stick-it-map.lr-projects.de   | -              | `manual` | - |
 
