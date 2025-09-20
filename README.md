@@ -15,10 +15,10 @@ This repository contains setup templates and configuration files for various app
 | Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de | -          | `watchtower` - tag: `stable`              | ✅ |
 | InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌ (dont really need) | `watchtower` - tag: `2.6-ubuntu`    | ❌ (community edition not possible)|
 | Grafana      | Alerting and montoring of metric data                | Thinkpad | grafana.thinkpad.lr-projects.de  | ❌ (manually in this repo)             | `watchtower` - tag: `latest` | ✅ | 
-| Telegraf      | Metric collector                | Thinkpad | -  | -              | `watchtower :1.31-alpine`                 | - |
+| Telegraf      | Metric collector                | Thinkpad | -  | -              | `watchtower` - tag: `1.31-alpine`                 | - |
 | Nextcloud     | File sharing and collaboration      | Thinkpad | nextcloud.lr-projects.de | ✅              | `watchtower` - tag: `latest`               | ✅ |
-| Nextcloud (MariaDB)     | Nextcloud database      | Thinkpad | - | -              | `watchtower :lts`               | - |
-| Nextcloud (Redis)     | Nextcloud in-memory db      | Thinkpad | - | -              | `watchtower :latest`               | - |
+| Nextcloud (MariaDB)     | Nextcloud database      | Thinkpad | - | -              | `watchtower` - tag: `lts`               | - |
+| Nextcloud (Redis)     | Nextcloud in-memory db      | Thinkpad | - | -              | `watchtower` - tag: `latest`               | - |
 | Monaserver       | Stick It backend                 | Thinkpad | stick-it.lr-projects.de   | ✅              | `manual`              | - |
 | Monaserver (Postgis)      | Stick It postgis database                 | Thinkpad | -   | ✅              | `manual`              | - |
 | Monaserver (Minio)      | Stick It image bucket                 | Thinkpad | minio.thinkpad.lr-projects.de   | ✅              | `manual`              | ❌ (community edition not possible) |
