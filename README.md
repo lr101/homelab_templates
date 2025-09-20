@@ -13,7 +13,7 @@ This repository contains setup templates and configuration files for various app
 | Watchtower    | Docker image updater        | Thinkpad | -      | -              | `manual`              | - |
 | Glance        | System monitoring dashboard         | Thinkpad | home.lr-projects.de    | -               | `watchtower` - tag: `latest`              | - |
 | Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de | -          | `watchtower` - tag: `stable`              | ✅ |
-| InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌ (dont really need) | `watchtower` | tag: `2.6-ubuntu`    | ❌ (community edition not possible)|
+| InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌ (dont really need) | `watchtower` - tag: `2.6-ubuntu`    | ❌ (community edition not possible)|
 | Grafana      | Alerting and montoring of metric data                | Thinkpad | grafana.thinkpad.lr-projects.de  | ❌ (manually in this repo)             | `watchtower` - tag: `latest` | ✅ | 
 | Telegraf      | Metric collector                | Thinkpad | -  | -              | `watchtower :1.31-alpine`                 | - |
 | Nextcloud     | File sharing and collaboration      | Thinkpad | nextcloud.lr-projects.de | ✅              | `watchtower` - tag: `latest`               | ✅ |
