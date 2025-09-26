@@ -1,0 +1,33 @@
+services:
+  reverse-proxy:
+    image: traefik:v3
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file: .env
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+
+      - traefik.http.routers.traefik-dash.rule=Host(`traefik.medion.lr-projects.de`)
+      - traefik.http.routers.traefik-dash.entrypoints=websecure
+      - traefik.http.routers.traefik-dash.tls=true
+      - traefik.http.routers.traefik-dash.tls.certresolver=cloudflare
+      - traefik.http.routers.traefik-dash.service=api@internal
+      - traefik.http.services.api@internal.loadbalancer.server.port=8080
+      - traefik.http.routers.traefik-dash.middlewares=oidc-auth@file
+
+      - com.centurylinklabs.watchtower.enable=true                         # Watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./dynamic:/etc/traefik/dynamic:ro
+      - ./certs:/var/traefik/certs
+      - ./logs:/logs
+    restart: unless-stopped
+    networks:
+      - frontend
+networks:
+  frontend:
+    external: true

@@ -1,0 +1,23 @@
+services:
+  app:
+    image: ghcr.io/lr101/portfolio:latest
+    container_name: portfolio
+    restart:  unless-stopped
+    working_dir: /app
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.portfolio.rule=Host(`portfolio.medion.lr-projects.de`)
+      - traefik.http.routers.portfolio.entrypoints=websecure
+      - traefik.http.routers.portfolio.tls=true
+      - traefik.http.routers.portfolio.tls.certresolver=cloudflare
+      - traefik.http.services.portfolio.loadbalancer.server.port=3000
+      - traefik.docker.network=frontend
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true
+
+
