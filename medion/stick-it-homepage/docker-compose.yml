@@ -1,0 +1,20 @@
+services:
+  app:
+    image: ghcr.io/lr101/stick-it-homepage:latest
+    container_name: stick-it-homepage
+    working_dir: /app
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.stick-it-home.rule=Host(`stick-it-home.medion.lr-projects.de`)
+      - traefik.http.routers.stick-it-home.entrypoints=websecure
+      - traefik.http.routers.stick-it-home.tls=true
+      - traefik.http.routers.stick-it-home.tls.certresolver=cloudflare
+      - traefik.http.services.stick-it-home.loadbalancer.server.port=3000
+      - traefik.docker.network=frontend
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true
