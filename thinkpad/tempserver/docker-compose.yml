@@ -1,0 +1,37 @@
+services:
+  tempserver:
+    command: java -jar -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m app.jar
+    image: lrprojects/tempserver:1.0.0-SNAPSHOT
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - 8081:8080
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PG_PSW}
+      DB_URL: "jdbc:postgresql://db:5432/tempserver"
+      INFLUXDB_URL: https://influx.medion.lr-projects.de
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+      INFLUXDB_BUCKET: tempserver
+      INFLUXDB_ORG: lr-projects
+      INFLUXDB_DOWNSAMPLED_BUCKET: tempserver_sampled
+      INFLUXDB_RETENTION_PERIOD: 7
+      MAX_THREADS: 5
+      MAX_CONNECTIONS: 200
+    networks:
+      - frontend
+      - db
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tempserver.rule=Host(`temppi.thinkpad.lr-projects.de`)
+      - traefik.http.routers.tempserver.entrypoints=websecure
+      - traefik.http.routers.tempserver.tls=true
+      - traefik.http.routers.tempserver.tls.certresolver=cloudflare
+      - traefik.http.services.tempserver.loadbalancer.server.port=8080
+      - traefik.docker.network=frontend
+networks:
+  frontend:
+    external: true
+  db:
+    external: true
+

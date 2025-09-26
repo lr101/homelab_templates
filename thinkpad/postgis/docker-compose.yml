@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgis/postgis:16-master
+    restart: unless-stopped
+    container_name: stick-it-db
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./backup:/backup
+    ports:
+      - 5432:5432
+    env_file: ./.env
+    environment:
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_USER=${PG_USER}
+    networks:
+      - db
+
+networks:
+  db:
+    external: true

@@ -1,0 +1,155 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies: 
+    - 127.0.0.1
+    - 192.168.0.83
+    - 10.217.236.3
+    - 172.18.0.0/16
+
+auth_oidc: 
+  client_id: !secret sso_client_id
+  client_secret: !secret sso_client_secret
+  discovery_url: https://sso.lr-projects.de/.well-known/openid-configuration
+  display_name: "Pocket-ID"
+  groups_scope: groups
+  claims:
+    display_name: display_name
+    username: preferred_username
+    groups: groups
+  roles:
+    admin: home_assistant_admin
+    user: home_assistant_users
+
+rest:
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/DHT_TEMP_01/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Wohnzimmer (Fernseher)"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/DHT_HUMID_01/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Humidity"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "%"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28ACA58A271901F2/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Pool"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28505064271901D5/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Buiten"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/2834F25A622001BC/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Maxim Dachboden"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28AE09BD622001DB/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Maxim Inverter"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/285E618931210327/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Slaapkamer deur"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/281C29AC3121031A/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Slaapkamer raam"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/284F6DA93121031A/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Kelder"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28C529A9312103C9/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Buiten2"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"
+
+  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28D44D9631210379/entry"
+    params:
+      date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
+      limit: 1
+    scan_interval: 300
+    verify_ssl: false
+    sensor:
+      - name: "Woonkamer (Sofa)"
+        value_template: "{{ value_json[0].value }}"
+        unit_of_measurement: "°C"

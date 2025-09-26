@@ -1,0 +1,25 @@
+services:
+  telegraf:
+    image: telegraf:1.31-alpine
+    restart: unless-stopped
+    user: telegraf:998
+    env_file: .env
+    dns:
+      - 10.217.236.1
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    environment:
+      - HOST_ETC=/hostfs/etc
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_MOUNT_PREFIX=/hostfs
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /:/hostfs:ro
+      - /etc:/hostfs/etc:ro
+      - /proc:/hostfs/proc:ro
+      - /sys:/hostfs/sys:ro
+      - /var/run/utmp:/var/run/utmp:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /dev:/dev:ro
+
