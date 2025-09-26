@@ -4,8 +4,9 @@ services:
     restart: unless-stopped
     env_file: .env
     user: "telegraf:${UID}"
-    dns:
-      - 10.217.236.1
+    network_mode: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     environment:
