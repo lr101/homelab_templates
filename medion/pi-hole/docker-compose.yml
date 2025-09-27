@@ -1,0 +1,64 @@
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      TZ: 'Europe/Berlin'
+      FTLCONF_dns_listeningMode: 'all'
+      FTLCONF_webserver_api_password: ${API_PSW}
+    volumes:
+      - './etc-pihole:/etc/pihole'
+      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    restart: unless-stopped
+    networks:
+      - frontend
+      - pihole-net
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.pi-hole.rule=Host(`pi-hole.medion.lr-projects.de`)
+      - traefik.http.routers.pi-hole.entrypoints=websecure
+      - traefik.http.routers.pi-hole.tls=true
+      - traefik.http.routers.pi-hole.tls.certresolver=cloudflare
+      - traefik.http.routers.pi-hole.service=pi-hole-scv
+      - traefik.http.services.pi-hole-scv.loadbalancer.server.port=80
+      - "com.centurylinklabs.watchtower.enable=true"
+      - traefik.http.routers.pi-hole.middlewares=oidc-auth@file
+    cap_add:
+      - NET_ADMIN
+      - SYS_TIME
+      - SYS_NICE
+
+  pihole-influxdb:
+    image: avojak/pihole-influxdb:latest
+    container_name: pihole-influxdb
+    restart: unless-stopped
+    dns: 127.0.0.1
+    depends_on:
+      - pihole
+    networks:
+      - pihole-net
+      - influxdb-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    environment:
+      - "PIHOLE_ALIAS=pihole-medion"
+      - "PIHOLE_ADDRESS=http://pihole:80"
+      - "PIHOLE_PASSWORD=${API_PSW}"
+      - "PIHOLE_NUM_TOP_ITEMS=25"
+      - "PIHOLE_NUM_TOP_CLIENTS=25"
+      - "INFLUXDB_ADDRESS=http://influxdb:8086"
+      - "INFLUXDB_ORG=lr-projects"
+      - "INFLUXDB_TOKEN=${INFLUXDB_TOKEN}"
+      - "INFLUXDB_BUCKET=pihole"
+networks:
+  frontend:
+    external: true
+  pihole-net:
+    external: false
+  influxdb-network:
+    external: true
