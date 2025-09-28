@@ -1,0 +1,126 @@
+# dynamic.yml (dynamic configuration)
+http:
+  routers:
+    # bitwarden
+    bitwarden:
+      entryPoints: websecure
+      rule: "Host(`bitwarden.lr-projects.de`)"
+      tls: true
+      service: bitwarden-service
+    
+    # home (dashboard)
+    home:
+      entryPoints: 
+        - websecure
+      rule: "Host(`home.lr-projects.de`)"
+      tls: true
+      service: home-service
+   
+    # portfolio
+    root:
+      entryPoints: websecure
+      rule: "Host(`lr-projects.de`)"
+      tls: true
+      service: portfolio-service
+
+    # minio
+    minio:
+      entryPoints: websecure
+      rule: "Host(`minio.lr-projects.de`) || HostRegexp(`{subdomain:[a-z0-9-]+}.minio.lr-projects.de`)"
+      tls: true
+      service: minio-service
+
+    # nextcloud
+    nextcloud:
+      entryPoints: websecure
+      rule: "Host(`nextcloud.lr-projects.de`)"
+      tls: true
+      service: nextcloud-service
+      middlewares: nextcloud_redirectregex
+
+    # sso
+    sso:
+      entryPoints: websecure
+      rule: "Host(`sso.lr-projects.de`)"
+      tls: true
+      service: sso-service
+
+    # stick-it
+    stickit:
+      entryPoints: websecure
+      rule: "Host(`stick-it.lr-projects.de`)"
+      tls: true
+      service: stickit-service
+
+    # stick-it-map
+    stickit-map:
+      entryPoints: websecure
+      rule: "Host(`stick-it-map.lr-projects.de`)"
+      tls: true
+      service: stickit-map-service
+  
+  services:
+    bitwarden-service:
+      loadBalancer:
+        serversTransport: bitwarden-transport
+        servers:
+          - url: "https://10.217.236.3:6443"
+        passHostHeader: true
+  
+    home-service:
+      loadBalancer:
+        servers:
+          - url: "https://home.thinkpad.lr-projects.de"
+        passHostHeader: false
+
+    portfolio-service:
+      loadBalancer:
+        servers:
+          - url: "https://portfolio.medion.lr-projects.de"
+        passHostHeader: false
+
+    minio-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.217.236.3:9000"
+        passHostHeader: true
+
+    nextcloud-service:
+      loadBalancer:
+        servers:
+          - url: "https://nextcloud.thinkpad.lr-projects.de"
+        passHostHeader: false
+
+    sso-service:
+      loadBalancer:
+        servers:
+          - url: "https://sso.medion.lr-projects.de"
+        passHostHeader: false
+
+    stickit-service:
+      loadBalancer:
+        servers:
+          - url: "https://stick-it.thinkpad.lr-projects.de"
+        passHostHeader: false
+
+    stickit-map-service:
+      loadBalancer:
+        servers:
+          - url: "https://stick-it-home.medion.lr-projects.de"
+        passHostHeader: false
+
+  serversTransports:
+    bitwarden-transport:
+      serverName: "10.217.236.3"
+      insecureSkipVerify: true
+
+  middlewares:
+    body-50mb:
+      buffering:
+        maxRequestBodyBytes: 52428800 # 50 MB
+
+    nextcloud_redirectregex:
+      redirectRegex:
+        regex: "https://(.*)/.well-known/(?:card|cal)dav"
+        replacement: "https://$$1/remote.php/dav"
+        permanent: true

@@ -6,7 +6,7 @@ services:
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "4080:80/tcp"
+      - "4080:80"
     env_file: .env
     environment:
       TZ: 'Europe/Berlin'
@@ -17,17 +17,8 @@ services:
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
     restart: unless-stopped
     cap_add:
-    # See 
-      # https://github.com/pi-hole/docker-pi-hole#note-on-capabilities 
-      # pi-hole: Required if you are using Pi-hole as 
-      # your DHCP server, else not needed external: 
-      # true
       - NET_ADMIN
-      # Required if you are using Pi-hole as your NTP 
-      # client to be able to set the host's system time
       - SYS_TIME
-      # Optional, if Pi-hole should get some more 
-      # processing time
       - SYS_NICE
 
   pihole-influxdb:

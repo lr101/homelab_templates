@@ -1,0 +1,25 @@
+http:
+  routers:
+    pi-hole:
+      rule: "Host(`pi-hole.ionos.lr-projects.de`)"
+      entryPoints: websecure
+      tls:
+        certResolver: cloudflare
+      service: pi-hole-svc
+      middlewares:
+        - oidc-auth
+
+    traefik-dashboard:
+      entryPoints: websecure
+      rule: "Host(`traefik.ionos.lr-projects.de`)"
+      tls:
+        certResolver: cloudflare
+      service: api@internal
+      middlewares:
+        - oidc-auth
+
+  services:
+    pi-hole-svc:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:4080"
