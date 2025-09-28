@@ -1,0 +1,11 @@
+services:
+  traefik:
+    image: traefik:v3
+    container_name: traefik
+    restart: always
+    env_file: .env
+    network_mode: host
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yaml:ro
+      - ./dynamic:/etc/traefik/dynamic
+      - ./certificates:/etc/traefik/certificates
