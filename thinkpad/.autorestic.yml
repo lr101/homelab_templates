@@ -1,0 +1,34 @@
+version: 2
+ 
+locations:
+  nextcloud:
+    from: nextcloud
+    type: volume
+
+  nextcloud-db:
+    from: db
+    type: volume
+    hooks:
+      before:
+        - bash backup-nextcloud-db-hook.sh
+    
+  nextcloud-config:
+    from: ./nextcloud
+    
+
+  bitwarden:
+    from: ./bitwarden
+    
+
+  glance:
+    from: ./glance
+
+  ha:
+    from: ./ha
+
+  monaserver:
+    from: ./monaserver
+
+
+  postgis:
+    from: ./postgis
