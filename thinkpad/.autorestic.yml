@@ -1,34 +1,54 @@
 version: 2
- 
+
+backends:
+  local:
+    type: local
+    path: /home/lr/backup
+
 locations:
   nextcloud:
-    from: nextcloud
-    type: volume
-
-  nextcloud-db:
-    from: db
-    type: volume
+    from: nextcloud/backup
+    to: local
     hooks:
       before:
-        - bash backup-nextcloud-db-hook.sh
+        - python3 ../scripts/backup/nextcloud-hook.py nextcloud-nextcloud-1 nextcloud-database-1 /nextcloud/backup
     
   nextcloud-config:
     from: ./nextcloud
     
 
+  # https://bitwarden.com/help/backup-on-premise/
   bitwarden:
     from: ./bitwarden
+    to: local
     
-
   glance:
     from: ./glance
+    to: local
 
   ha:
     from: ./ha
+    to: local
 
+  # This back-ups the minio data folder. The minio docs do not state that the server must be stopped.
+  # The database is backed up in postgis.
+  # https://blog.min.io/back-up-restic-minio/
   monaserver:
     from: ./monaserver
-
+    to: local
 
   postgis:
-    from: ./postgis
+    from: ./postgis/backup
+    to: local
+    hooks:
+      before:
+        - python3 ../scripts/backup/postgres-hook.py stick-it-db postgres stickitprod tempserver --backup-dir postgis/backup
+
+  # Database backup in postgis
+  tempserver:
+    from: ./tempserver
+    to: local
+
+  traefik:
+    from: ./traefik
+    to: local
