@@ -1,0 +1,157 @@
+backends:
+  local:
+    type: local
+    path: /home/lr/backup
+    requirekey: false
+    env: {}
+    rest:
+      user: ""
+      password: ""
+    options: {}
+locations:
+  immich:
+    from:
+    - ./immich-app
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options:
+      backup:
+        exclude:
+        - ./immich-app/postgres
+        - ./immich-app/library/thumbs
+        - ./immich-app/library/encoded-video
+    
+    copyoption: {}
+  jellyfin:
+    from:
+    - ./jellyfin
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    
+    copyoption: {}
+  logging:
+    from:
+    - ./logging
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options:
+      backup:
+        exclude:
+        - ./logging/influx_backup
+        - ./logging/influx/influx_data
+    
+    copyoption: {}
+  pihole:
+    from:
+    - ./pi-hole
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    
+    copyoption: {}
+  pocketid:
+    from:
+    - ./pocket-id
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    
+    copyoption: {}
+  portfolio:
+    from:
+    - ./portfolio
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    
+    copyoption: {}
+  stick-it-homepage:
+    from:
+    - ./stick-it-homepage
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    
+    copyoption: {}
+  traefik:
+    from:
+    - ./traefik
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    
+    copyoption: {}
+version: 2
