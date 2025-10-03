@@ -6,17 +6,24 @@ backends:
     path: /home/lr/backup
 
 locations:
+
+  # This creates a database dump before the backup and puts nextcloud in maintenance mode.
+  # https://docs.nextcloud.com/server/stable/admin_manual/maintenance/backup.html
   nextcloud:
-    from: nextcloud/backup
+    from: ./nextcloud
+    type: volume
     to: local
     hooks:
       before:
-        - python3 ../scripts/backup/nextcloud-hook.py nextcloud-nextcloud-1 nextcloud-database-1 /nextcloud/backup
+        - bash export $(grep -v '^#' nextcloud/.env | xargs)
+        - bash docker exec -u root nextcloud-database-1 apt update
+        - bash docker exec -u root nextcloud-database-1 apt install -y mysql-client
+        - bash docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode --on
+        - bash docker exec nextcloud-database-1 mysqldump --single-transaction -h localhost -u nextcloud -p$NEXTCLOUD_DB_PASSWORD nextcloud > ./nextcloud/backup/nextcloud.bak
+      after:
+        - bash docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode --off
+        - bash unset $(grep -v '^#' nextcloud/.env | sed -E 's/(.*)=.*/\1/' | xargs)
     
-  nextcloud-config:
-    from: ./nextcloud
-    
-
   # https://bitwarden.com/help/backup-on-premise/
   bitwarden:
     from: ./bitwarden
@@ -26,6 +33,7 @@ locations:
     from: ./glance
     to: local
 
+  # Backup created by HA itself daily and stored in /backup. Is included in this target as well.
   ha:
     from: ./ha
     to: local
@@ -42,7 +50,7 @@ locations:
     to: local
     hooks:
       before:
-        - python3 ../scripts/backup/postgres-hook.py stick-it-db postgres stickitprod tempserver --backup-dir postgis/backup
+        - python3 ../scripts/postgres-hook.py stick-it-db postgres stickitprod tempserver --backup-dir postgis/backup
 
   # Database backup in postgis
   tempserver:
