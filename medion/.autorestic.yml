@@ -1,7 +1,17 @@
 backends:
+  drive:
+    type: rclone
+    path: drive:backup/medion
+    requirekey: false
+    env: {}
+    rest:
+      user: ""
+      password: ""
+    options: {}
   local:
     type: local
     path: /home/lr/backup
+    key: ""
     requirekey: false
     env: {}
     rest:
@@ -15,6 +25,7 @@ locations:
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
@@ -29,7 +40,6 @@ locations:
         - ./immich-app/postgres
         - ./immich-app/library/thumbs
         - ./immich-app/library/encoded-video
-    
     copyoption: {}
   jellyfin:
     from:
@@ -46,7 +56,6 @@ locations:
       failure: []
     cron: ""
     options: {}
-    
     copyoption: {}
   logging:
     from:
@@ -67,7 +76,6 @@ locations:
         exclude:
         - ./logging/influx_backup
         - ./logging/influx/influx_data
-    
     copyoption: {}
   pihole:
     from:
@@ -84,7 +92,6 @@ locations:
       failure: []
     cron: ""
     options: {}
-    
     copyoption: {}
   pocketid:
     from:
@@ -101,7 +108,6 @@ locations:
       failure: []
     cron: ""
     options: {}
-    
     copyoption: {}
   portfolio:
     from:
@@ -118,7 +124,6 @@ locations:
       failure: []
     cron: ""
     options: {}
-    
     copyoption: {}
   stick-it-homepage:
     from:
@@ -135,7 +140,6 @@ locations:
       failure: []
     cron: ""
     options: {}
-    
     copyoption: {}
   traefik:
     from:
@@ -152,6 +156,5 @@ locations:
       failure: []
     cron: ""
     options: {}
-    
     copyoption: {}
 version: 2
