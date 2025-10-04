@@ -33,7 +33,7 @@ See the [official docs](https://autorestic.vercel.app/config).
     ```
     - As root: You first need to copy your rclone config into the root users home. Something like:
     ```
-    sudo cp -r ~/.config/restic/restic.conf /root/restic/restic.conf
+    sudo cp ~/.config/rclone/rclone.conf /root/rclone/rclone.conf
     sudo autorestic --ci backup -a
     ```
 

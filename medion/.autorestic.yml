@@ -1,13 +1,20 @@
 backends:
-  drive:
-    type: rclone
-    path: drive:backup/medion
-    requirekey: false
-    env: {}
-    rest:
-      user: ""
-      password: ""
-    options: {}
+  #drive:
+  #  type: rclone
+  #  path: drive:backup/medion
+  #  requirekey: false
+  #  env: {}
+  #  rest:
+  #    user: ""
+  #    password: ""
+  #  forget: prune
+  #  options:
+  #    forget:
+  #      keep-last: 5 # always keep at least 5 snapshots
+  #      keep-daily: 4 # keep 4 last daily snapshots
+  #      keep-weekly: 1 # keep 1 last weekly snapshots
+  #      keep-monthly: 12 # keep 12 last monthly snapshots
+  #      keep-yearly: 1 # keep 1 last yearly snapshots
   local:
     type: local
     path: /home/lr/backup
@@ -17,7 +24,14 @@ backends:
     rest:
       user: ""
       password: ""
-    options: {}
+    forget: prune
+    options:
+      forget:
+        keep-last: 5 # always keep at least 5 snapshots
+        keep-daily: 4 # keep 4 last daily snapshots
+        keep-weekly: 1 # keep 1 last weekly snapshots
+        keep-monthly: 12 # keep 12 last monthly snapshots
+        keep-yearly: 7 # keep 7 last yearly snapshots
 locations:
   docker-tags:
     from:
@@ -39,7 +53,7 @@ locations:
     type: ""
     to:
     - local
-    - drive
+    #- drive
     hooks:
       dir: ""
       prevalidate: []
