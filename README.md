@@ -6,47 +6,47 @@ This repository contains setup templates and configuration files for various app
 
 ### Thinkpad
 
-| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution | SSO Integration |
-|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|------------------|
-| Bitwarden     | Password manager                    | Thinkpad | bitwarden.lr-projects.de | ✅              | `cron`              | must be standalone |
-| Diun          | Docker image update notifier        | Thinkpad | -      |  -             | `manual`              | - |
-| Watchtower    | Docker image updater        | Thinkpad | -      | -              | `manual`              | - |
-| Glance        | System monitoring dashboard         | Thinkpad | home.lr-projects.de    | -               | `watchtower` - tag: `latest`              | - |
-| Home Assistant| Home automation platform            | Thinkpad | ha.thinkpad.lr-projects.de | -          | `watchtower` - tag: `stable`              | ✅ |
-| InfluxDB      | Time-series database                | Thinkpad | influx.thinkpad.lr-projects.de  | ❌ (dont really need) | `watchtower` - tag: `2.6-ubuntu`    | ❌ (community edition not possible)|
-| Grafana      | Alerting and montoring of metric data                | Thinkpad | grafana.thinkpad.lr-projects.de  | ❌ (manually in this repo)             | `watchtower` - tag: `latest` | ✅ | 
-| Telegraf      | Metric collector                | Thinkpad | -  | -              | `watchtower` - tag: `1.31-alpine`                 | - |
-| Nextcloud     | File sharing and collaboration      | Thinkpad | nextcloud.lr-projects.de | ✅              | `watchtower` - tag: `latest`               | ✅ |
-| Nextcloud (MariaDB)     | Nextcloud database      | Thinkpad | - | -              | `watchtower` - tag: `lts`               | - |
-| Nextcloud (Redis)     | Nextcloud in-memory db      | Thinkpad | - | -              | `watchtower` - tag: `latest`               | - |
-| Monaserver       | Stick It backend                 | Thinkpad | stick-it.lr-projects.de   | ✅              | `manual`              | - |
-| Monaserver (Postgis)      | Stick It postgis database                 | Thinkpad | -   | ✅              | `manual`              | - |
-| Monaserver (Minio)      | Stick It image bucket                 | Thinkpad | minio.thinkpad.lr-projects.de   | ✅              | `manual`              | ❌ (community edition not possible) |
-| Traefik      | Reverse Proxy (with https)                 | Thinkpad | traefik.thinkpad.lr-projects.de   | -              | `watchtower` - tag: `v3` | ✅  |
-| Portfolio      | Homepage of lr-projects                 | Thinkpad | lr-projects.de   | -              | `manual` | - |
-| Stick-It Homepage      | Landing page of the Stick-It app| Thinkpad | stick-it-map.lr-projects.de   | -              | `manual` | - |
+| Name                 | Description                    | Domain                          | Backup Solution | Update Solution                   | SSO Integration                    |
+| -------------------- | ------------------------------ | ------------------------------- | --------------- | --------------------------------- | ---------------------------------- |
+| Bitwarden            | Password manager               | bitwarden.lr-projects.de        | ✅ local         | `cron`                            | must be standalone                 |
+| Watchtower           | Docker image updater           | -                               | -               | `manual`                          | -                                  |
+| Glance               | System monitoring dashboard    | home.lr-projects.de             | ✅ local         | `watchtower` - tag: `latest`      | -                                  |
+| Home Assistant       | Home automation platform       | ha.thinkpad.lr-projects.de      | ✅ local         | `watchtower` - tag: `stable`      | ✅                                  |
+| Telegraf             | Metric collector               | -                               | -               | `watchtower` - tag: `1.31-alpine` | -                                  |
+| Nextcloud            | File sharing and collaboration | nextcloud.lr-projects.de        | ✅ local         | `watchtower` - tag: `latest`      | ✅                                  |
+| Nextcloud (MariaDB)  | Nextcloud database             | -                               | ✅ local         | `watchtower` - tag: `lts`         | -                                  |
+| Nextcloud (Redis)    | Nextcloud in-memory db         | -                               | -               | `watchtower` - tag: `latest`      | -                                  |
+| Monaserver           | Stick It backend               | stick-it.lr-projects.de         | ✅ local         | `manual`                          | -                                  |
+| Monaserver (Postgis) | Stick It postgis database      | -                               | ✅ local         | `manual`                          | -                                  |
+| Monaserver (Minio)   | Stick It image bucket          | minio.thinkpad.lr-projects.de   | ✅ local         | `manual`                          | ❌ (community edition not possible) |
+| Traefik              | Reverse Proxy (with https)     | traefik.thinkpad.lr-projects.de | ✅ local         | `watchtower` - tag: `v3`          | ✅                                  |
+|                      |
 
 
 ### Medion
 
-| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution | SSO Integration |
-|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|-----------------|
-| Immich           | Image storage | Medion | immich.medion.lr-projects.de |  ❌             |`watchtower` - tag: `release`| ✅ |
-| Jellyfin         | Movie storage | Medion | jellyfin.medion.lr-projects.de      |  ❌             |`watchtower` - tag: `latest` | ✅ |
-| Pocket-ID        | SSO solution         | Medion | sso.medion.lr-projects.de      |  ❌             |`watchtower` - tag: `v1`               | ✅ |
-| Pi-Hole          | DNS for home network         | Medion | pihole.medion.lr-projects.de      |  ❌             | `watchtower` - tag: `latest`       | ? |
-| Traefik      | Reverse Proxy (with https)                 | Medion | traefik.medion.lr-projects.de   | -              |`watchtower` - tag: `v3`   | ✅ |
-| Diun          | Docker image update notifier        | Medion | -      |  -             | `watchtower` - tag: `latest` | - |
-| Telegraf      | Metric collector                | Medion | -  | -              | `watchtower` - tag: `1.31-alpine`  | - |
+| Name              | Description                           | Domain                         | Backup Solution       | Update Solution                   | SSO Integration                    |
+| ----------------- | ------------------------------------- | ------------------------------ | --------------------- | --------------------------------- | ---------------------------------- |
+| Immich            | Image storage                         | immich.medion.lr-projects.de   | ✅ local               | `watchtower` - tag: `release`     | ✅                                  |
+| Jellyfin          | Movie storage                         | jellyfin.medion.lr-projects.de | ✅ local (only config) | `watchtower` - tag: `latest`      | ✅                                  |
+| Pocket-ID         | SSO solution                          | sso.medion.lr-projects.de      | ✅ local               | `watchtower` - tag: `v1`          | ✅                                  |
+| Pi-Hole           | DNS for home network                  | pihole.medion.lr-projects.de   | ✅ local               | `watchtower` - tag: `latest`      | ✅                                  |
+| Traefik           | Reverse Proxy (with https)            | traefik.medion.lr-projects.de  | ✅ local               | `watchtower` - tag: `v3`          | ✅                                  |
+| Telegraf          | Metric collector                      | -                              | -                     | `watchtower` - tag: `1.31-alpine` | -                                  |
+| InfluxDB          | Time-series database                  | influx.medion.lr-projects.de   | ✅ local (only config) | `watchtower` - tag: `2.6-ubuntu`  | ❌ (community edition not possible) |
+| Grafana           | Alerting and montoring of metric data | grafana.medion.lr-projects.de  | ✅ local               | `watchtower` - tag: `latest`      | ✅                                  |
+| Portfolio         | Homepage of lr-projects               | lr-projects.de                 | ✅ local               | `manual`                          | -                                  |
+| Stick-It Homepage | Landing page of the Stick-It app      | stick-it-map.lr-projects.de    | ✅ local               | `manual`                          | -                                  |
+
 
 
 ### Ionos
 
-| Name          | Description                          | Device   | Domain                  | Backup Solution | Update Solution | SSO Integration |
-|---------------|--------------------------------------|----------|-------------------------|-----------------|-----------------|-----------------|
-| Nginx-UI      | Reverse proxy (facing the internet)           | Ionos | nginx-ui.ionos.lr-projects.de |  ❌ (manually in this repo)            | ❌              | ? |
-| Pi-Hole       | DNS for vpn network         | Ionos | pi-hole.ionos.lr-projects.de      |  ❌             | ❌               | ? |
-| Telegraf      | Metric collector                | Ionos | -  | -              | ❌                 | - |
+| Name     | Description                | Device | Domain                       | Backup Solution | Update Solution          | SSO Integration |
+| -------- | -------------------------- | ------ | ---------------------------- | --------------- | ------------------------ | --------------- |
+| Traefik  | Reverse Proxy (with https) | Ionos  | traefik.ionos.lr-projects.de | -               | `watchtower` - tag: `v3` | ✅               |
+| Pi-Hole  | DNS for vpn network        | Ionos  | pi-hole.ionos.lr-projects.de | ❌               | ❌                        | ✅               |
+| Telegraf | Metric collector           | Ionos  | -                            | -               | ❌                        | -               |
 
 ## Homelab setup
 
