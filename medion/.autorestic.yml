@@ -19,6 +19,20 @@ backends:
       password: ""
     options: {}
 locations:
+  docker-tags:
+    from:
+    - ./.backup
+    to:
+    - local
+    type: ""
+    hooks:
+      dir: ""
+      prevalidate: []
+      before:
+      - docker images --digests --format 'table {{.Repository}}\t{{.Tag}}\t{{.Digest}}\t{{.ID}}' > ./.backup/docker-tags.txt
+      after: []
+      success: []
+      failure: []
   immich:
     from:
     - ./immich-app
