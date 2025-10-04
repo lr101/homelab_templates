@@ -1,0 +1,169 @@
+backends:
+#  drive:
+#    type: rclone
+#    path: drive_janlul:backup/thinkpad
+#    requirekey: false
+#    env: {}
+#    rest:
+#      user: ""
+#      password: ""
+#    options: {}
+  local:
+    type: local
+    path: /home/lr/backup
+    key: ""
+    requirekey: false
+    env: {}
+    rest:
+      user: ""
+      password: ""
+    forget: prune
+    options:
+      forget:
+        keep-last: 5 # always keep at least 5 snapshots
+        keep-daily: 4 # keep 4 last daily snapshots
+        keep-weekly: 1 # keep 1 last weekly snapshots
+        keep-monthly: 12 # keep 12 last monthly snapshots
+        keep-yearly: 7 # keep 7 last yearly snapshots
+locations:
+  bitwarden:
+    from:
+    - ./bitwarden
+    type: ""
+    to:
+    - local
+  #  - drive
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  glance:
+    from:
+    - ./glance
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  ha:
+    from:
+    - ./ha
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  monaserver:
+    from:
+    - ./monaserver
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  nextcloud:
+    from:
+    - ./nextcloud
+    type: ""
+    to:
+    - local
+ #   - drive
+    hooks:
+      dir: ""
+      prevalidate: []
+      before:
+      - docker exec -u root nextcloud-database-1 apt update
+      - docker exec -u root nextcloud-database-1 apt install -y mysql-client
+      - docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode  --on
+      - set -a;source nextcloud/.env;set +a;docker exec -e MYSQL_PWD="$NEXTCLOUD_DB_PASSWORD"
+        nextcloud-database-1 mysqldump --single-transaction --column-statistics=0
+        -h localhost -u nextcloud  nextcloud > ./nextcloud/backup/nextcloud.bak
+      after:
+      - docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode  --off
+      - unset $(grep -v '^#' nextcloud/.env | sed -E 's/(.*)=.*/\1/' | xargs)
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  postgis:
+    from:
+    - ./postgis/backup
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before:
+      - python3 ../scripts/postgres-hook.py stick-it-db postgres stickitprod tempserver
+        --backup-dir postgis/backup
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  tempserver:
+    from:
+    - ./tempserver
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  traefik:
+    from:
+    - ./traefik
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+version: 2

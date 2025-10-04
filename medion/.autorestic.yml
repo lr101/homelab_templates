@@ -1,0 +1,188 @@
+backends:
+  #drive:
+  #  type: rclone
+  #  path: drive:backup/medion
+  #  requirekey: false
+  #  env: {}
+  #  rest:
+  #    user: ""
+  #    password: ""
+  #  forget: prune
+  #  options:
+  #    forget:
+  #      keep-last: 5 # always keep at least 5 snapshots
+  #      keep-daily: 4 # keep 4 last daily snapshots
+  #      keep-weekly: 1 # keep 1 last weekly snapshots
+  #      keep-monthly: 12 # keep 12 last monthly snapshots
+  #      keep-yearly: 1 # keep 1 last yearly snapshots
+  local:
+    type: local
+    path: /home/lr/backup
+    key: ""
+    requirekey: false
+    env: {}
+    rest:
+      user: ""
+      password: ""
+    forget: prune
+    options:
+      forget:
+        keep-last: 5 # always keep at least 5 snapshots
+        keep-daily: 4 # keep 4 last daily snapshots
+        keep-weekly: 1 # keep 1 last weekly snapshots
+        keep-monthly: 12 # keep 12 last monthly snapshots
+        keep-yearly: 7 # keep 7 last yearly snapshots
+locations:
+  docker-tags:
+    from:
+    - ./.backup
+    to:
+    - local
+    type: ""
+    hooks:
+      dir: ""
+      prevalidate: []
+      before:
+      - docker images --digests --format 'table {{.Repository}}\t{{.Tag}}\t{{.Digest}}\t{{.ID}}' > ./.backup/docker-tags.txt
+      after: []
+      success: []
+      failure: []
+  immich:
+    from:
+    - ./immich-app
+    type: ""
+    to:
+    - local
+    #- drive
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options:
+      backup:
+        exclude:
+        - ./immich-app/postgres
+        - ./immich-app/library/thumbs
+        - ./immich-app/library/encoded-video
+    copyoption: {}
+  jellyfin:
+    from:
+    - ./jellyfin
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  logging:
+    from:
+    - ./logging
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options:
+      backup:
+        exclude:
+        - ./logging/influx_backup
+        - ./logging/influx/influx_data
+    copyoption: {}
+  pihole:
+    from:
+    - ./pi-hole
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  pocketid:
+    from:
+    - ./pocket-id
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  portfolio:
+    from:
+    - ./portfolio
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  stick-it-homepage:
+    from:
+    - ./stick-it-homepage
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+  traefik:
+    from:
+    - ./traefik
+    type: ""
+    to:
+    - local
+    hooks:
+      dir: ""
+      prevalidate: []
+      before: []
+      after: []
+      success: []
+      failure: []
+    cron: ""
+    options: {}
+    copyoption: {}
+version: 2
