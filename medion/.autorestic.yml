@@ -1,3 +1,12 @@
+global:
+  forget:
+    keep-last: 5 # always keep at least 5 snapshots
+    keep-daily: 4 # keep 4 last daily snapshots
+    keep-weekly: 1 # keep 1 last weekly snapshots
+    keep-monthly: 12 # keep 12 last monthly snapshots
+    keep-yearly: 7 # keep 7 last yearly snapshots
+
+
 backends:
   #drive:
   #  type: rclone
@@ -24,14 +33,6 @@ backends:
     rest:
       user: ""
       password: ""
-    forget: prune
-    options:
-      forget:
-        keep-last: 5 # always keep at least 5 snapshots
-        keep-daily: 4 # keep 4 last daily snapshots
-        keep-weekly: 1 # keep 1 last weekly snapshots
-        keep-monthly: 12 # keep 12 last monthly snapshots
-        keep-yearly: 7 # keep 7 last yearly snapshots
 locations:
   docker-tags:
     from:
@@ -47,6 +48,7 @@ locations:
       after: []
       success: []
       failure: []
+    forget: prune
   immich:
     from:
     - ./immich-app
@@ -69,6 +71,7 @@ locations:
         - ./immich-app/library/thumbs
         - ./immich-app/library/encoded-video
     copyoption: {}
+    forget: prune
   jellyfin:
     from:
     - ./jellyfin
@@ -85,6 +88,7 @@ locations:
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   logging:
     from:
     - ./logging
@@ -105,6 +109,7 @@ locations:
         - ./logging/influx_backup
         - ./logging/influx/influx_data
     copyoption: {}
+    forget: prune
   pihole:
     from:
     - ./pi-hole
@@ -121,6 +126,7 @@ locations:
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   pocketid:
     from:
     - ./pocket-id
@@ -137,6 +143,7 @@ locations:
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   portfolio:
     from:
     - ./portfolio
@@ -153,6 +160,7 @@ locations:
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   stick-it-homepage:
     from:
     - ./stick-it-homepage
@@ -169,6 +177,7 @@ locations:
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   traefik:
     from:
     - ./traefik
@@ -185,4 +194,5 @@ locations:
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
 version: 2
