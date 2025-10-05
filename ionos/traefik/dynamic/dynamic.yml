@@ -38,6 +38,11 @@ http:
       service: nextcloud-service
       middlewares: nextcloud_redirectregex
 
+    office:
+      entryPoints: websecure
+      rule: "Host(`office.lr-projects.de`)"
+      tls: true
+      service: office-service
     # sso
     sso:
       entryPoints: websecure
@@ -89,6 +94,12 @@ http:
       loadBalancer:
         servers:
           - url: "https://nextcloud.thinkpad.lr-projects.de"
+        passHostHeader: false
+
+    office-service:
+      loadBalancer:
+        servers:
+          - url: "https://office.thinkpad.lr-projects.de"
         passHostHeader: false
 
     sso-service:
