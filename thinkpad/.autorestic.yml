@@ -38,7 +38,8 @@ locations:
       dir: ""
       prevalidate: []
       before:
-      - docker ps -q | while read cid; do
+      - |
+        docker ps -q | while read cid; do
           cname=$(docker inspect -f '{{.Name}}' "$cid" | sed 's#^/##')
           image=$(docker inspect -f '{{.Config.Image}}' "$cid")
           digest=$(docker image inspect "$image" --format '{{index .RepoDigests 0}}' 2>/dev/null || echo "none")
