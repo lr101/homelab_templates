@@ -6,6 +6,7 @@ global:
     keep-weekly: 1 # keep 1 last weekly snapshots
     keep-monthly: 12 # keep 12 last monthly snapshots
     keep-yearly: 7 # keep 7 last yearly snapshots
+    retry-lock: 10
 
 backends:
   drive:
@@ -193,9 +194,9 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status success
+      - python3 ../scripts/influx-hook.py --host thinkpad --service tempserver --status success
       failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status failure
+      - python3 ../scripts/influx-hook.py --host thinkpad --service tempserver --status failure
     cron: ""
     options: {}
     copyoption: {}
