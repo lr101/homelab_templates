@@ -45,8 +45,10 @@ locations:
           printf "%s\t%s\t%s\n" "$cname" "$image" "$digest"
         done > ./.backup/docker-tags.txt
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service docker-tags --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service docker-tags --status failure
     forget: prune
   bitwarden:
     from:
@@ -60,8 +62,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -78,8 +82,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service glance --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service glance --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -95,8 +101,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service ha --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service ha --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -113,8 +121,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service monaserver --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service monaserver --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -139,8 +149,10 @@ locations:
       after:
       - docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode  --off
       - unset $(grep -v '^#' nextcloud/.env | sed -E 's/(.*)=.*/\1/' | xargs)
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service nextcloud --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service nextcloud --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -159,8 +171,10 @@ locations:
       - python3 ../scripts/postgres-hook.py stick-it-db postgres stickitprod tempserver
         --backup-dir postgis/backup
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service postgis --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service postgis --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -177,8 +191,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -195,8 +211,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service traefik --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service traefik --status failure
     cron: ""
     options: {}
     copyoption: {}

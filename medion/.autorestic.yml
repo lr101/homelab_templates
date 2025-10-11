@@ -44,8 +44,10 @@ locations:
           printf "%s\t%s\t%s\n" "$cname" "$image" "$digest"
         done > ./.backup/docker-tags.txt
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service docker-tags --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service docker-tags --status failure
     forget: prune
   immich:
     from:
@@ -59,8 +61,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service immich --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service immich --status failure
     cron: ""
     options:
       backup:
@@ -82,8 +86,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service jellyfin --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service jellyfin --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -100,8 +106,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service logging --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service logging --status failure
     cron: ""
     options:
       backup:
@@ -122,8 +130,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service pihole --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service pihole --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -140,8 +150,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service pocketid --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service pocketid --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -158,8 +170,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service portfolio --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service portfolio --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -176,8 +190,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service stick-it-homepage --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service stick-it-homepage --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -194,8 +210,10 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service traefik --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service traefik --status failure
     cron: ""
     options: {}
     copyoption: {}
