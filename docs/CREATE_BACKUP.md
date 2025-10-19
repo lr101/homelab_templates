@@ -45,6 +45,7 @@ wget -qO - https://raw.githubusercontent.com/cupcakearmy/autorestic/master/insta
 2. Create a `.autorestic.yml`
 
 3. Check the config by running:
+
 ```shell
 autorestic check
 ```
@@ -54,6 +55,7 @@ autorestic check
 5. In the current version 1.8.3 there is a bug that generates a faulty entry called `forgetoption`. Just remove it everywhere in your autorestic config.
 
 6. Run your backup:
+<<<<<<< HEAD
 ```shell
 autorestic --ci backup -a
 ```
@@ -68,3 +70,17 @@ crontab -e
 # Copy and adjust the folder path
 0 2 * * *  autorestic -c <path>/.autorestic.yml --ci backup -a
 ```
+=======
+    - As non-root:
+    ```shell
+    autorestic --ci backup -a
+    ```
+    - As root: You first need to copy your rclone config into the root users home. Something like:
+    ```
+    sudo cp ~/.config/rclone/rclone.conf /root/rclone/rclone.conf
+    sudo autorestic --ci backup -a
+    ```
+
+## Run as Cron
+
+>>>>>>> origin/main
