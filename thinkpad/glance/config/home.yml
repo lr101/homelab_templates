@@ -34,7 +34,7 @@
     - size: full
       widgets:
         - type: monitor
-          cache: 5m
+          cache: 60m
           title: Services (Public)
           sites:
             - title: Homepage
@@ -55,8 +55,12 @@
             - title: Nextcloud
               url: https://nextcloud.lr-projects.de
               icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/nextcloud.svg
+            - title: Pocket ID
+              url: https://sso.lr-projects.de
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/pocket-id-light.svg
+
         - type: monitor
-          cache: 5m
+          cache: 60m
           title: Services (Private)
           sites:
             - title: Grafana
@@ -66,26 +70,30 @@
               url: https://ha.thinkpad.lr-projects.de/auth/oidc/redirect
               icon: https://cdn.jsdelivr.net/gh/loganmarchione/homelab-svg-assets/assets/homeassistant.svg
             - title: Pi-Hole Ionos (VPN)
-              url: https://pihole.ionos.lr-projects.de/admin/login
+              url: https://pi-hole.ionos.lr-projects.de/admin/login
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/pi-hole.svg
+              alt-status-codes:
+                - 401
             - title: Pi-Hole Medion (Home Network)
               url: https://pi-hole.medion.lr-projects.de/admin/login
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/pi-hole.svg
               alt-status-codes:
                 - 401
-            - title: Nginx-UI
-              url: https://nginx.ionos.lr-projects.de
-              icon:	https://nginxui.com/assets/logo.svg
             - title: InfluxDB
               url: https://influx.medion.lr-projects.de
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/influxdb.svg
-            - title: Traefik Dashboard (Thinkpad)
+            - title: Traefik (Thinkpad)
               url: https://traefik.thinkpad.lr-projects.de/dashboard/#
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/traefik-proxy.svg
               alt-status-codes:
                 - 401
-            - title: Traefik Dashboard (Medion)
+            - title: Traefik (Medion)
               url: https://traefik.medion.lr-projects.de/dashboard/#
+              icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/traefik-proxy.svg
+              alt-status-codes:
+                - 401
+            - title: Traefik (Ionos)
+              url: https://traefik.ionos.lr-projects.de/dashboard/#
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/traefik-proxy.svg
               alt-status-codes:
                 - 401
@@ -104,6 +112,8 @@
             - title: Temppi
               url: https://temppi.thinkpad.lr-projects.de/?
               icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/raspberry-pi-light.svg
-            - title: Pocket ID
-              url: https://sso.lr-projects.de
-              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/pocket-id-light.svg
+            - title: Uptime Kuma
+              url: https://uptime.medion.lr-projects.de
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/uptime-kuma.svg
+              alt-status-codes:
+                - 401

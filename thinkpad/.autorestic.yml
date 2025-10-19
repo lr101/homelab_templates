@@ -20,7 +20,7 @@ backends:
     options: {}
   local:
     type: local
-    path: /home/lr/backup
+    path: /home/lr/backup2
     key: ""
     requirekey: false
     env: {}
