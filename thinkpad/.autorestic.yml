@@ -1,64 +1,97 @@
+
+global:
+  forget:
+    keep-last: 5 # always keep at least 5 snapshots
+    keep-daily: 4 # keep 4 last daily snapshots
+    keep-weekly: 1 # keep 1 last weekly snapshots
+    keep-monthly: 12 # keep 12 last monthly snapshots
+    keep-yearly: 7 # keep 7 last yearly snapshots
+    retry-lock: 10
+
 backends:
-#  drive:
-#    type: rclone
-#    path: drive_janlul:backup/thinkpad
-#    requirekey: false
-#    env: {}
-#    rest:
-#      user: ""
-#      password: ""
-#    options: {}
+  drive:
+    type: rclone
+    path: drive_lr101:backup/thinkpad
+    requirekey: false
+    env: {}
+    rest:
+      user: ""
+      password: ""
+    options: {}
   local:
     type: local
-    path: /home/lr/backup
+    path: /home/lr/backup2
     key: ""
     requirekey: false
     env: {}
     rest:
       user: ""
       password: ""
-    forget: prune
-    options:
-      forget:
-        keep-last: 5 # always keep at least 5 snapshots
-        keep-daily: 4 # keep 4 last daily snapshots
-        keep-weekly: 1 # keep 1 last weekly snapshots
-        keep-monthly: 12 # keep 12 last monthly snapshots
-        keep-yearly: 7 # keep 7 last yearly snapshots
 locations:
+  docker-tags:
+    from:
+    - ./.backup
+    to:
+    - local
+    - drive
+    type: ""
+    hooks:
+      dir: ""
+      prevalidate: []
+      before:
+      - |
+        docker ps -q | while read cid; do
+          cname=$(docker inspect -f '{{.Name}}' "$cid" | sed 's#^/##')
+          image=$(docker inspect -f '{{.Config.Image}}' "$cid")
+          digest=$(docker image inspect "$image" --format '{{index .RepoDigests 0}}' 2>/dev/null || echo "none")
+          printf "%s\t%s\t%s\n" "$cname" "$image" "$digest"
+        done > ./.backup/docker-tags.txt
+      after: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service docker-tags --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service docker-tags --status failure
+    forget: prune
   bitwarden:
     from:
     - ./bitwarden
     type: ""
     to:
     - local
-  #  - drive
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   glance:
     from:
     - ./glance
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service glance --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service glance --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   ha:
     from:
     - ./ha
@@ -70,34 +103,41 @@ locations:
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service ha --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service ha --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   monaserver:
     from:
     - ./monaserver
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service monaserver --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service monaserver --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   nextcloud:
     from:
     - ./nextcloud
     type: ""
     to:
     - local
- #   - drive
+    - drive
     hooks:
       dir: ""
       prevalidate: []
@@ -111,17 +151,21 @@ locations:
       after:
       - docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode  --off
       - unset $(grep -v '^#' nextcloud/.env | sed -E 's/(.*)=.*/\1/' | xargs)
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service nextcloud --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service nextcloud --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   postgis:
     from:
     - ./postgis/backup
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
@@ -129,40 +173,50 @@ locations:
       - python3 ../scripts/postgres-hook.py stick-it-db postgres stickitprod tempserver
         --backup-dir postgis/backup
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service postgis --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service postgis --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   tempserver:
     from:
     - ./tempserver
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service tempserver --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service tempserver --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   traefik:
     from:
     - ./traefik
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service traefik --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host thinkpad --service traefik --status failure
     cron: ""
     options: {}
     copyoption: {}

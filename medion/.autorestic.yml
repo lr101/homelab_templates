@@ -1,20 +1,21 @@
+global:
+  forget:
+    keep-last: 5 # always keep at least 5 snapshots
+    keep-daily: 4 # keep 4 last daily snapshots
+    keep-weekly: 1 # keep 1 last weekly snapshots
+    keep-monthly: 12 # keep 12 last monthly snapshots
+    keep-yearly: 7 # keep 7 last yearly snapshots
+
+
 backends:
-  #drive:
-  #  type: rclone
-  #  path: drive:backup/medion
-  #  requirekey: false
-  #  env: {}
-  #  rest:
-  #    user: ""
-  #    password: ""
-  #  forget: prune
-  #  options:
-  #    forget:
-  #      keep-last: 5 # always keep at least 5 snapshots
-  #      keep-daily: 4 # keep 4 last daily snapshots
-  #      keep-weekly: 1 # keep 1 last weekly snapshots
-  #      keep-monthly: 12 # keep 12 last monthly snapshots
-  #      keep-yearly: 1 # keep 1 last yearly snapshots
+  drive:
+    type: rclone
+    path: drive:backup/medion
+    requirekey: false
+    env: {}
+    rest:
+      user: ""
+      password: ""
   local:
     type: local
     path: /home/lr/backup
@@ -24,165 +25,198 @@ backends:
     rest:
       user: ""
       password: ""
-    forget: prune
-    options:
-      forget:
-        keep-last: 5 # always keep at least 5 snapshots
-        keep-daily: 4 # keep 4 last daily snapshots
-        keep-weekly: 1 # keep 1 last weekly snapshots
-        keep-monthly: 12 # keep 12 last monthly snapshots
-        keep-yearly: 7 # keep 7 last yearly snapshots
 locations:
   docker-tags:
     from:
     - ./.backup
     to:
     - local
+    - drive
     type: ""
     hooks:
       dir: ""
       prevalidate: []
       before:
-      - docker images --digests --format 'table {{.Repository}}\t{{.Tag}}\t{{.Digest}}\t{{.ID}}' > ./.backup/docker-tags.txt
+      - |
+        docker ps -q | while read cid; do
+          cname=$(docker inspect -f '{{.Name}}' "$cid" | sed 's#^/##')
+          image=$(docker inspect -f '{{.Config.Image}}' "$cid")
+          digest=$(docker image inspect "$image" --format '{{index .RepoDigests 0}}' 2>/dev/null || echo "none")
+          printf "%s\t%s\t%s\n" "$cname" "$image" "$digest"
+        done > ./.backup/docker-tags.txt
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service docker-tags --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service docker-tags --status failure
+    forget: prune
   immich:
     from:
     - ./immich-app
     type: ""
     to:
     - local
-    #- drive
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service immich --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service immich --status failure
     cron: ""
     options:
       backup:
         exclude:
-        - ./immich-app/postgres
-        - ./immich-app/library/thumbs
-        - ./immich-app/library/encoded-video
+        - '*/postgres/*'
+        - '*/library/thumbs/*'
+        - '*/library/encoded-video/*'
     copyoption: {}
+    forget: prune
   jellyfin:
     from:
     - ./jellyfin
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service jellyfin --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service jellyfin --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   logging:
     from:
     - ./logging
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service logging --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service logging --status failure
     cron: ""
     options:
       backup:
         exclude:
-        - ./logging/influx_backup
-        - ./logging/influx/influx_data
+        - '*/influx_backup/*'
+        - '*/influx/influx_data/*'
     copyoption: {}
+    forget: prune
   pihole:
     from:
     - ./pi-hole
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service pihole --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service pihole --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   pocketid:
     from:
     - ./pocket-id
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service pocketid --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service pocketid --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   portfolio:
     from:
     - ./portfolio
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service portfolio --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service portfolio --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   stick-it-homepage:
     from:
     - ./stick-it-homepage
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service stick-it-homepage --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service stick-it-homepage --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
   traefik:
     from:
     - ./traefik
     type: ""
     to:
     - local
+    - drive
     hooks:
       dir: ""
       prevalidate: []
       before: []
       after: []
-      success: []
-      failure: []
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service traefik --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service traefik --status failure
     cron: ""
     options: {}
     copyoption: {}
+    forget: prune
 version: 2
