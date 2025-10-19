@@ -2,3 +2,4 @@ grafana/**
 grafana-config/**
 influx/**
 influx_backup/**
+uptime-kuma/**
