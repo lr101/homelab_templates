@@ -5,6 +5,8 @@ services:
     restart: always
     env_file: .env
     network_mode: host
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yaml:ro
       - ./dynamic:/etc/traefik/dynamic

@@ -5,6 +5,8 @@ services:
     container_name: watchtower
     restart: unless-stopped
     env_file: .env
+    dns:
+      - 1.1.1.1
     environment:
       # Only act on containers with this label
       WATCHTOWER_LABEL_ENABLE: "true"
@@ -18,7 +20,7 @@ services:
       # Send notification if major update is available
       WATCHTOWER_NOTIFICATIONS: "email"
       WATCHTOWER_NOTIFICATION_EMAIL_FROM: lr.dev.projects@gmail.com
-      WATCHTOWER_NOTIFICATION_EMAIL_TO: lukasr101@proton.me
+      WATCHTOWER_NOTIFICATION_EMAIL_TO: info@lr-projects.de
       WATCHTOWER_NOTIFICATION_EMAIL_SERVER: smtp.gmail.com
       WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT: 587
       WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER: lr.dev.projects@gmail.com

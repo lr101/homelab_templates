@@ -8,6 +8,8 @@ services:
       - "53:53/udp"
       - "4080:80"
     env_file: .env
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     environment:
       TZ: 'Europe/Berlin'
       FTLCONF_dns_listeningMode: 'all'
@@ -26,6 +28,8 @@ services:
     container_name: pihole-influxdb
     restart: unless-stopped
     network_mode: host
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     depends_on:
       - pihole
     env_file: .env
