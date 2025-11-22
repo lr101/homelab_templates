@@ -9,3 +9,41 @@ http:
             ClientId: ${CLIENT_ID}
             ClientSecret: ${CLIENT_SECRET}
           Scopes: ["openid", "profile", "email"]
+
+    allow-vpn-ips:
+      ipAllowList:
+        sourceRange:
+          - "127.0.0.1/32"
+          - "10.217.236.0/24"
+
+    secHeaders:
+      headers:
+        browserXssFilter: true
+        contentTypeNosniff: true
+        frameDeny: true
+        customFrameOptionsValue: "SAMEORIGIN"
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        customResponseHeaders:
+          server: ""
+          x-powered-by: ""
+
+    crowdsec:
+      plugin:
+        bouncer:
+          crowdsecMode: live
+          enabled: true
+          crowdsecAppsecEnabled: true
+          crowdsecAppsecHost: "127.0.0.1:7422"
+          crowdsecAppsecPath: "/"
+          crowdsecAppsecFailureBlock: true
+          crowdsecAppsecUnreachableBlock: true
+          crowdsecAppsecBodyLimit: 10485760
+          crowdsecLapiKey: {{ env "CROWDSEC_BOUNCER_API_KEY" }}
+          crowdseclapischeme: http
+          crowdseclapihost: "127.0.0.1:8080"
+          crowdsecLapiTLSInsecureVerify: true
+          clientTrustedIPs:
+            - 10.217.236.0/24          
+

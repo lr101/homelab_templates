@@ -11,3 +11,20 @@ services:
       - ./traefik.yml:/etc/traefik/traefik.yaml:ro
       - ./dynamic:/etc/traefik/dynamic
       - ./certificates:/etc/traefik/certificates
+      - ./traefik-logs:/logs
+
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    network_mode: host
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - BOUNCER_KEY_TRAEFIK=$CROWDSEC_BOUNCER_API_KEY
+      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
+    volumes:
+      - ./crowdsec/data:/var/lib/crowdsec/data
+      - ./crowdsec/etc:/etc/crowdsec
+      - ./traefik-logs:/var/log/traefik:ro
+      - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
+

@@ -5,7 +5,8 @@ http:
     bitwarden:
       entryPoints: websecure
       rule: "Host(`bitwarden.lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: bitwarden-service
     
     # home (dashboard)
@@ -13,56 +14,92 @@ http:
       entryPoints: 
         - websecure
       rule: "Host(`home.lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: home-service
    
     # portfolio
     root:
       entryPoints: websecure
       rule: "Host(`lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: portfolio-service
+      middlewares:
+        - secHeaders
+
+    # portfolio
+    www:
+      entryPoints: websecure
+      rule: "Host(`www.lr-projects.de`)"
+      service: portfolio-service
+      tls:
+        certResolver: cloudflare
+      middlewares:
+        - secHeaders
+
 
     # minio
     minio:
       entryPoints: websecure
       rule: "Host(`minio.lr-projects.de`) || HostRegexp(`{subdomain:[a-z0-9-]+}.minio.lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: minio-service
+      middlewares:
+        - secHeaders
+
 
     # nextcloud
     nextcloud:
       entryPoints: websecure
       rule: "Host(`nextcloud.lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: nextcloud-service
-      middlewares: nextcloud_redirectregex
+      middlewares: 
+        - nextcloud_redirectregex
+
 
     office:
       entryPoints: websecure
       rule: "Host(`office.lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: office-service
-    # sso
+    
+# sso
     sso:
       entryPoints: websecure
       rule: "Host(`sso.lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: sso-service
+      middlewares:
+        - secHeaders
+
 
     # stick-it
     stickit:
       entryPoints: websecure
       rule: "Host(`stick-it.lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: stickit-service
+      middlewares:
+        - secHeaders
+
 
     # stick-it-map
     stickit-map:
       entryPoints: websecure
       rule: "Host(`stick-it-map.lr-projects.de`)"
-      tls: true
+      tls:
+        certResolver: cloudflare
       service: stickit-map-service
+      middlewares:
+        - secHeaders
+
   
   services:
     bitwarden-service:
