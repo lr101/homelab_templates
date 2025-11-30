@@ -13,14 +13,10 @@ This repository contains setup templates and configuration files for various app
 | Glance               | System monitoring dashboard    | home.lr-projects.de             | ✅ local         | `watchtower` - tag: `latest`      | -                                  |
 | Home Assistant       | Home automation platform       | ha.thinkpad.lr-projects.de      | ✅ local         | `watchtower` - tag: `stable`      | ✅                                  |
 | Telegraf             | Metric collector               | -                               | -               | `watchtower` - tag: `1.31-alpine` | -                                  |
-| Nextcloud            | File sharing and collaboration | nextcloud.lr-projects.de        | ✅ local         | `watchtower` - tag: `latest`      | ✅                                  |
-| Nextcloud (MariaDB)  | Nextcloud database             | -                               | ✅ local         | `watchtower` - tag: `lts`         | -                                  |
-| Nextcloud (Redis)    | Nextcloud in-memory db         | -                               | -               | `watchtower` - tag: `latest`      | -                                  |
 | Monaserver           | Stick It backend               | stick-it.lr-projects.de         | ✅ local         | `manual`                          | -                                  |
 | Monaserver (Postgis) | Stick It postgis database      | -                               | ✅ local         | `manual`                          | -                                  |
 | Monaserver (Minio)   | Stick It image bucket          | minio.thinkpad.lr-projects.de   | ✅ local         | `manual`                          | ❌ (community edition not possible) |
 | Traefik              | Reverse Proxy (with https)     | traefik.thinkpad.lr-projects.de | ✅ local         | `watchtower` - tag: `v3`          | ✅                                  |
-|                      |
 
 
 ### Medion
@@ -37,6 +33,9 @@ This repository contains setup templates and configuration files for various app
 | Grafana           | Alerting and montoring of metric data | grafana.medion.lr-projects.de  | ✅ local               | `watchtower` - tag: `latest`      | ✅                                  |
 | Portfolio         | Homepage of lr-projects               | lr-projects.de                 | ✅ local               | `manual`                          | -                                  |
 | Stick-It Homepage | Landing page of the Stick-It app      | stick-it-map.lr-projects.de    | ✅ local               | `manual`                          | -                                  |
+| Nextcloud            | File sharing and collaboration | nextcloud.lr-projects.de        | ✅ local         | `watchtower` - tag: `latest`      | ✅                                  |
+| Nextcloud (MariaDB)  | Nextcloud database             | -                               | ✅ local         | `watchtower` - tag: `lts`         | -                                  |
+| Nextcloud (Redis)    | Nextcloud in-memory db         | -                               | -               | `watchtower` - tag: `latest`      | -                                  |
 
 
 
