@@ -1,6 +1,6 @@
 services:
   stick-it-server:
-    image: lrprojects/stick-it-server:latest
+    image: lrprojects/stick-it-server:0.0.14
     container_name: stick-it-server
     restart: unless-stopped
     volumes:
