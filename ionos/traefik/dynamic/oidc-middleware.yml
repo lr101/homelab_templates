@@ -21,10 +21,31 @@ http:
         browserXssFilter: true
         contentTypeNosniff: true
         frameDeny: true
+        referrerPolicy: "no-referrer-when-downgrade"
         customFrameOptionsValue: "SAMEORIGIN"
         stsIncludeSubdomains: true
         stsPreload: true
         stsSeconds: 31536000
+        permissionsPolicy: >
+          autoplay=(self), camera=(self),
+          clipboard-read=(self), clipboard-write=(self),
+          display-capture=(self), encrypted-media=(self),
+          fullscreen=(self), geolocation=(self),
+          microphone=(self), midi=(),
+          payment=(), picture-in-picture=(self),
+          publickey-credentials-get=(self),
+        contentSecurityPolicy: >
+          default-src 'self';
+          script-src 'self' https://*.lr-projects.de;
+          style-src 'self' https://*.lr-projects.de;
+          img-src 'self' https://cdn.jsdelivr.net https://*.lr-projects.de data:;
+          font-src 'self' https://*.lr-projects.de;
+          connect-src 'self' https://*.lr-projects.de;
+          frame-src 'self' https://*.lr-projects.de;
+          object-src 'none';
+          base-uri 'self';
+          form-action 'self';
+          frame-ancestors 'self';
         customResponseHeaders:
           server: ""
           x-powered-by: ""

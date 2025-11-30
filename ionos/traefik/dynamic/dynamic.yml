@@ -25,8 +25,6 @@ http:
       tls:
         certResolver: cloudflare
       service: portfolio-service
-      middlewares:
-        - secHeaders
 
     # portfolio
     www:
@@ -35,8 +33,6 @@ http:
       service: portfolio-service
       tls:
         certResolver: cloudflare
-      middlewares:
-        - secHeaders
 
 
     # minio
@@ -46,8 +42,6 @@ http:
       tls:
         certResolver: cloudflare
       service: minio-service
-      middlewares:
-        - secHeaders
 
 
     # nextcloud
@@ -57,8 +51,6 @@ http:
       tls:
         certResolver: cloudflare
       service: nextcloud-service
-      middlewares: 
-        - nextcloud_redirectregex
 
 
     office:
@@ -75,8 +67,6 @@ http:
       tls:
         certResolver: cloudflare
       service: sso-service
-      middlewares:
-        - secHeaders
 
 
     # stick-it
@@ -86,8 +76,6 @@ http:
       tls:
         certResolver: cloudflare
       service: stickit-service
-      middlewares:
-        - secHeaders
 
 
     # stick-it-map
@@ -97,8 +85,6 @@ http:
       tls:
         certResolver: cloudflare
       service: stickit-map-service
-      middlewares:
-        - secHeaders
 
   
   services:
@@ -130,13 +116,13 @@ http:
     nextcloud-service:
       loadBalancer:
         servers:
-          - url: "https://nextcloud.thinkpad.lr-projects.de"
+          - url: "https://nextcloud.medion.lr-projects.de"
         passHostHeader: false
 
     office-service:
       loadBalancer:
         servers:
-          - url: "https://office.thinkpad.lr-projects.de"
+          - url: "https://office.medion.lr-projects.de"
         passHostHeader: false
 
     sso-service:
