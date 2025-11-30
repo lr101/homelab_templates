@@ -12,9 +12,6 @@ This repository contains setup templates and configuration files for various app
 | Glance               | System monitoring dashboard    | home.lr-projects.de             | ✅         | `watchtower` - tag: `latest`      | -                                  |
 | Home Assistant       | Home automation platform       | ha.thinkpad.lr-projects.de      | ✅         | `watchtower` - tag: `stable`      | ✅                                  |
 | Telegraf             | Metric collector               | -                               | -               | `watchtower` - tag: `1.31-alpine` | -                                  |
-| Nextcloud            | File sharing and collaboration | nextcloud.lr-projects.de        | ✅         | `watchtower` - tag: `latest`      | ✅                                  |
-| Nextcloud (MariaDB)  | Nextcloud database             | -                               | ✅         | `watchtower` - tag: `lts`         | -                                  |
-| Nextcloud (Redis)    | Nextcloud in-memory db         | -                               | -               | `watchtower` - tag: `latest`      | -                                  |
 | Monaserver           | Stick It backend               | stick-it.lr-projects.de         | ✅          | `manual`                          | ❌ (not supported by me)                 |
 | Monaserver (Postgis) | Stick It postgis database      | -                               | ✅          | `manual`                          | -                                  |
 | Monaserver (Minio)   | Stick It image bucket          | minio.thinkpad.lr-projects.de   | ✅          | `manual`                          | ❌ (community edition not possible) |
@@ -39,6 +36,9 @@ This repository contains setup templates and configuration files for various app
 | Portfolio         | Homepage of lr-projects               | lr-projects.de                 | ✅                | `manual`                          | -                                  |
 | Stick-It Homepage | Landing page of the Stick-It app      | stick-it-map.lr-projects.de    | ✅                | `manual`                          | -                                  |
 | Watchtower           | Docker image updater           | -                               | -               | `manual`                          | -                                  |
+| Nextcloud            | File sharing and collaboration | nextcloud.lr-projects.de        | ✅ local         | `watchtower` - tag: `latest`      | ✅                                  |
+| Nextcloud (MariaDB)  | Nextcloud database             | -                               | ✅ local         | `watchtower` - tag: `lts`         | -                                  |
+| Nextcloud (Redis)    | Nextcloud in-memory db         | -                               | -               | `watchtower` - tag: `latest`      | -                                  |
 
 
 

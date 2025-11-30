@@ -50,6 +50,34 @@ locations:
       failure:
       - python3 ../scripts/influx-hook.py --host medion --service docker-tags --status failure
     forget: prune
+  nextcloud:
+    from:
+    - ./nextcloud
+    type: ""
+    to:
+    - local
+    - drive
+    hooks:
+      dir: ""
+      prevalidate: []
+      before:
+      - docker exec -u root nextcloud-database-1 apt update
+      - docker exec -u root nextcloud-database-1 apt install -y mysql-client
+      - docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode  --on
+      - set -a;source nextcloud/.env;set +a;docker exec -e MYSQL_PWD="$NEXTCLOUD_DB_PASSWORD"
+        nextcloud-database-1 mysqldump --single-transaction --column-statistics=0
+        -h localhost -u nextcloud  nextcloud > ./nextcloud/backup/nextcloud.bak
+      after:
+      - docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode  --off
+      - unset $(grep -v '^#' nextcloud/.env | sed -E 's/(.*)=.*/\1/' | xargs)
+      success:
+      - python3 ../scripts/influx-hook.py --host medion --service nextcloud --status success
+      failure:
+      - python3 ../scripts/influx-hook.py --host medion --service nextcloud --status failure
+    cron: ""
+    options: {}
+    copyoption: {}
+    forget: prune
   immich:
     from:
     - ./immich-app
