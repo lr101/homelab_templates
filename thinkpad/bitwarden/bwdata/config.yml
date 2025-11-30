@@ -25,9 +25,6 @@ http_port: 6080
 # Learn more: https://docs.docker.com/compose/compose-file/#ports
 https_port: 6443
 # 
-# Configure Nginx for Captcha.
-captcha: false
-# 
 # Configure Nginx for SSL.
 ssl: true
 # 
@@ -90,3 +87,6 @@ enable_key_connector: false
 # 
 # Enable SCIM
 enable_scim: false
+# 
+# Enable Built-In MSSQL Container Generation
+enable_built_in_ms_sql: true

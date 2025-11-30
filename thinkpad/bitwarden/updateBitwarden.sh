@@ -1,3 +1,3 @@
 #!/bin/bash
-./bitwarden.sh updateself
-./bitwarden.sh update
+$(pwd)/bitwarden.sh updateself
+$(pwd)/bitwarden.sh update

@@ -65,8 +65,8 @@ BITWARDEN_SCRIPT_URL="https://func.bitwarden.com/api/dl/?app=self-host&platform=
 RUN_SCRIPT_URL="https://func.bitwarden.com/api/dl/?app=self-host&platform=linux&variant=run"
 
 # Please do not create pull requests modifying the version numbers.
-COREVERSION="2025.4.2"
-WEBVERSION="2025.4.0"
+COREVERSION="2025.11.0"
+WEBVERSION="2025.11.1"
 KEYCONNECTORVERSION="2024.8.0"
 
 echo "bitwarden.sh version $COREVERSION"
@@ -82,12 +82,14 @@ echo ""
 # Functions
 
 function downloadSelf() {
-    if curl -L -s -w "http_code %{http_code}" -o $SCRIPT_PATH.1 $BITWARDEN_SCRIPT_URL | grep -q "^http_code 20[0-9]"
+    if curl -L -s -S -w "http_code %{http_code}" -o $SCRIPT_PATH.1 $BITWARDEN_SCRIPT_URL | grep -q "^http_code 20[0-9]"
     then
         mv -f $SCRIPT_PATH.1 $SCRIPT_PATH
         chmod u+x $SCRIPT_PATH
     else
+        exit_code=$?
         rm -f $SCRIPT_PATH.1
+        exit $exit_code
     fi
 }
 
@@ -99,7 +101,7 @@ function downloadRunFile() {
 
     local tmp_script=$(mktemp)
 
-    run_file_status_code=$(curl -s -L -w "%{http_code}" -o $tmp_script $RUN_SCRIPT_URL)
+    run_file_status_code=$(curl -s -S -L -w "%{http_code}" -o $tmp_script $RUN_SCRIPT_URL)
     if echo "$run_file_status_code" | grep -q "^20[0-9]"
     then
         mv $tmp_script $SCRIPTS_DIR/run.sh
