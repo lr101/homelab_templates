@@ -13,7 +13,7 @@ There are multiple ways on how to handle privileges in which your backup is runn
 2. Run as root
 3. Run using a specific user with read only access to all files. See this [restic](https://restic.readthedocs.io/en/latest/080_examples.html#backing-up-your-system-without-running-restic-as-root) example.
 
-After deciding, switch to your user:
+After deciding, switch to your user for all of the next steps (especially for crontab):
 ```
 su - <user>
 ```
@@ -55,7 +55,6 @@ autorestic check
 5. In the current version 1.8.3 there is a bug that generates a faulty entry called `forgetoption`. Just remove it everywhere in your autorestic config.
 
 6. Run your backup:
-<<<<<<< HEAD
 ```shell
 autorestic --ci backup -a
 ```
@@ -67,20 +66,7 @@ Currenty I just do something like this and running it directly in cron:
 ```shell
 crontab -e
 
-# Copy and adjust the folder path
-0 2 * * *  autorestic -c <path>/.autorestic.yml --ci backup -a
+# Copy the next two lines and adjust the folder path
+PATH="/usr/local/bin:/usr/bin:/bin"    # This is required, as it otherwise cannot find restic as a command.
+0 2 * * *  autorestic -c <path>/.autorestic.yml --ci backup -a # Adjust the path to your config file
 ```
-=======
-    - As non-root:
-    ```shell
-    autorestic --ci backup -a
-    ```
-    - As root: You first need to copy your rclone config into the root users home. Something like:
-    ```
-    sudo cp ~/.config/rclone/rclone.conf /root/rclone/rclone.conf
-    sudo autorestic --ci backup -a
-    ```
-
-## Run as Cron
-
->>>>>>> origin/main
