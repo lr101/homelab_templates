@@ -9,3 +9,62 @@ http:
             ClientId: ${CLIENT_ID}
             ClientSecret: ${CLIENT_SECRET}
           Scopes: ["openid", "profile", "email"]
+
+    allow-vpn-ips:
+      ipAllowList:
+        sourceRange:
+          - "127.0.0.1/32"
+          - "10.217.236.0/24"
+
+    secHeaders:
+      headers:
+        browserXssFilter: true
+        contentTypeNosniff: true
+        frameDeny: true
+        referrerPolicy: "no-referrer-when-downgrade"
+        customFrameOptionsValue: "SAMEORIGIN"
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        permissionsPolicy: >
+          autoplay=(self), camera=(self),
+          clipboard-read=(self), clipboard-write=(self),
+          display-capture=(self), encrypted-media=(self),
+          fullscreen=(self), geolocation=(self),
+          microphone=(self), midi=(),
+          payment=(), picture-in-picture=(self),
+          publickey-credentials-get=(self),
+        contentSecurityPolicy: >
+          default-src 'self';
+          script-src 'self' https://*.lr-projects.de;
+          style-src 'self' https://*.lr-projects.de;
+          img-src 'self' https://cdn.jsdelivr.net https://*.lr-projects.de data:;
+          font-src 'self' https://*.lr-projects.de;
+          connect-src 'self' https://*.lr-projects.de;
+          frame-src 'self' https://*.lr-projects.de;
+          object-src 'none';
+          base-uri 'self';
+          form-action 'self';
+          frame-ancestors 'self';
+        customResponseHeaders:
+          server: ""
+          x-powered-by: ""
+
+    crowdsec:
+      plugin:
+        bouncer:
+          crowdsecMode: live
+          enabled: true
+          crowdsecAppsecEnabled: true
+          crowdsecAppsecHost: "127.0.0.1:7422"
+          crowdsecAppsecPath: "/"
+          crowdsecAppsecFailureBlock: true
+          crowdsecAppsecUnreachableBlock: true
+          crowdsecAppsecBodyLimit: 10485760
+          crowdsecLapiKey: {{ env "CROWDSEC_BOUNCER_API_KEY" }}
+          crowdseclapischeme: http
+          crowdseclapihost: "127.0.0.1:8080"
+          crowdsecLapiTLSInsecureVerify: true
+          clientTrustedIPs:
+            - 10.217.236.0/24          
+

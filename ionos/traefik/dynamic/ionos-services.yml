@@ -7,6 +7,7 @@ http:
         certResolver: cloudflare
       service: pi-hole-svc
       middlewares:
+        - allow-vpn-ips
         - oidc-auth
 
     traefik-dashboard:
@@ -16,7 +17,10 @@ http:
         certResolver: cloudflare
       service: api@internal
       middlewares:
+        - allow-vpn-ips
         - oidc-auth
+  
+
 
   services:
     pi-hole-svc:

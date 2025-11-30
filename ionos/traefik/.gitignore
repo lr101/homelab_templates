@@ -1,2 +1,4 @@
 **.save
 certificates/**
+crowdsec/**
+traefik-logs/**
