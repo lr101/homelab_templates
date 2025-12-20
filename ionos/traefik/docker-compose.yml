@@ -4,7 +4,13 @@ services:
     container_name: traefik
     restart: always
     env_file: .env
-    network_mode: host
+    ports:
+      - 443:443
+      - 80:80
+    networks:
+      - backend
+    dns:
+      - 172.20.0.100
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
@@ -16,9 +22,12 @@ services:
   crowdsec:
     image: crowdsecurity/crowdsec:latest
     container_name: crowdsec
-    network_mode: host
     restart: unless-stopped
     env_file: .env
+    dns:
+      - 172.20.0.100
+    networks:
+      - backend
     environment:
       - BOUNCER_KEY_TRAEFIK=$CROWDSEC_BOUNCER_API_KEY
       - COLLECTIONS=crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
@@ -28,3 +37,9 @@ services:
       - ./traefik-logs:/var/log/traefik:ro
       - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
 
+networks:
+  backend:
+    external: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

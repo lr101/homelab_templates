@@ -31,7 +31,7 @@ log:
 accesslog:
   filepath: /logs/access.log
   
-
+api: {}
 
 certificatesResolvers:
   cloudflare:
