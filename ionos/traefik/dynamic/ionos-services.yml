@@ -26,4 +26,4 @@ http:
     pi-hole-svc:
       loadBalancer:
         servers:
-          - url: "http://localhost:4080"
+          - url: "http://pihole:80"
