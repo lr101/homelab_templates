@@ -50,6 +50,29 @@ services:
       - traefik.http.services.grafana.loadbalancer.server.port=3000
       - "com.centurylinklabs.watchtower.enable=true"
 
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    networks:
+      - influxdb-network
+      - frontend
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.prometheus.rule=Host(`prometheus.medion.lr-projects.de`)
+      - traefik.http.routers.prometheus.entrypoints=websecure
+      - traefik.http.routers.prometheus.tls=true
+      - traefik.http.routers.prometheus.tls.certresolver=cloudflare
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.http.routers.adguard.middlewares=oidc-auth@file
+
   uptime-kuma:
     image: louislam/uptime-kuma:1
     restart: unless-stopped
