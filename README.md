@@ -25,15 +25,16 @@ This repository contains setup templates and configuration files for various app
 | Name              | Description                           | Domain                         | Backup Solution   | Update Solution                   | SSO Integration                    |
 | ----------------- | ------------------------------------- | ------------------------------ | ----------------- | --------------------------------- | ---------------------------------- |
 | Immich            | Image storage                         | immich.medion.lr-projects.de   | ✅                | `watchtower` - tag: `release`     | ✅                                  |
+| Immich-Kiosk            | Diashow for digital picture frame | diashow.medion.lr-projects.de   | ✅  (only config)              | `watchtower` - tag: `release`     | ✅                                  |
 | Jellyfin          | Movie storage                         | jellyfin.medion.lr-projects.de | ✅ (only config)  | `watchtower` - tag: `latest`      | ✅                                  |
 | Pocket-ID         | SSO solution                          | sso.medion.lr-projects.de      | ✅                | `watchtower` - tag: `v1`          | - (is the SSO)                      |
-| Pi-Hole           | DNS for home network                  | pihole.medion.lr-projects.de   | ✅                | `watchtower` - tag: `latest`      | ✅ (via Traefik OIDC)                |
-| Pi-Hole influxDB  | Sidecar for pi-hole metric collection | -                              | -                 | `watchtower` - tag: `latest`      | -                                   |
+| Adguard-Home           | DNS for home network                  | dns.medion.lr-projects.de   | ✅                | `watchtower` - tag: `latest`      | ✅ (via Traefik OIDC)                |
+| Adguard-Exporter  | Sidecar for adguard metric collection | -                              | -                 | `watchtower` - tag: `latest`      | -                                   |
 | Traefik           | Reverse Proxy (with https)            | traefik.medion.lr-projects.de  | ✅                | `watchtower` - tag: `v3`          | ✅ (via Traefik OIDC)               |
 | Telegraf          | Metric collector                      | -                              | -                 | `watchtower` - tag: `1.31-alpine` | -                                  |
 | InfluxDB          | Time-series database                  | influx.medion.lr-projects.de   | ✅ (only config)  | `watchtower` - tag: `2.6-ubuntu`  | ❌ (community edition not possible) |
 | Grafana           | Alerting and montoring of metric data | grafana.medion.lr-projects.de  | ✅                | `watchtower` - tag: `latest`      | ✅                                  |
-| Portfolio         | Homepage of lr-projects               | lr-projects.de                 | ✅                | `manual`                          | -                                  |
+| Prometheus           | Used for metric collection | grafana.medion.lr-projects.de  | ✅                | `watchtower` - tag: `latest`      | ✅                                  |
 | Stick-It Homepage | Landing page of the Stick-It app      | stick-it-map.lr-projects.de    | ✅                | `manual`                          | -                                  |
 | Watchtower           | Docker image updater           | -                               | -               | `manual`                          | -                                  |
 | Nextcloud            | File sharing and collaboration | nextcloud.lr-projects.de        | ✅ local         | `watchtower` - tag: `latest`      | ✅                                  |
@@ -51,6 +52,12 @@ This repository contains setup templates and configuration files for various app
 | Pi-Hole influxDB  | Sidecar for pi-hole metric collection | -                              | -                 | `watchtower` - tag: `latest`      | -                                   |
 | Telegraf | Metric collector           | Ionos  | -                            | -               | `watchtower` - tag: `telegraf:1.31-alpine`  | -               |
 | Watchtower           | Docker image updater           | -                               | -               | `manual`                          | -                                  |
+
+
+### External
+| Name     | Description                | Hosting Platform | Domain                       | Backup Solution | Update Solution           | SSO Integration |
+| Portfolio         | Homepage of lr-projects   | GitHub pages  | lr-projects.de          | ✅ static       | merge into main on GitHub | -               |
+
 
 ## Homelab setup
 

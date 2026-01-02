@@ -1,2 +1,3 @@
 library/**
 postgres/**
+kiosk.env

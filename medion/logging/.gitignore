@@ -3,3 +3,4 @@ grafana-config/**
 influx/**
 influx_backup/**
 uptime-kuma/**
+prometheus/data/**

@@ -93,6 +93,38 @@ services:
     networks:
       - immich
 
+
+  immich-kiosk:
+    image: ghcr.io/damongolding/immich-kiosk:latest
+    container_name: immich-kiosk
+    tty: true
+    env_file: kiosk.env
+    networks:
+     - immich
+     - frontend
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.immich-kiosk.rule=Host(`diashow.medion.lr-projects.de`)
+      - traefik.http.routers.immich-kiosk.entrypoints=websecure
+      - traefik.http.routers.immich-kiosk.tls=true
+      - traefik.http.routers.immich-kiosk.tls.certresolver=cloudflare
+      - traefik.http.routers.immich-kiosk.service=immich-kiosk-scv
+      - traefik.http.services.immich-kiosk-scv.loadbalancer.server.port=3000
+      - traefik.docker.network=frontend
+      - "com.centurylinklabs.watchtower.enable=true"
+    volumes:
+      - ./config:/config
+      # - ./custom.css:/custom.css
+      # - ./offline-assets:/offline-assets
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
 volumes:
   model-cache:
 
