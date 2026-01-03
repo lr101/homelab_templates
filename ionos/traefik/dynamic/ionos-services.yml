@@ -1,11 +1,11 @@
 http:
   routers:
-    pi-hole:
-      rule: "Host(`pi-hole.ionos.lr-projects.de`)"
+    adguard:
+      rule: "Host(`dns.ionos.lr-projects.de`)"
       entryPoints: websecure
       tls:
         certResolver: cloudflare
-      service: pi-hole-svc
+      service: adguard-scv
       middlewares:
         - allow-vpn-ips
         - oidc-auth
@@ -19,11 +19,24 @@ http:
       middlewares:
         - allow-vpn-ips
         - oidc-auth
-  
+      
+    adguard-metrics:
+      rule: "Host(`dns-metrics.ionos.lr-projects.de`)"
+      entryPoints: websecure
+      tls:
+        certResolver: cloudflare
+      service: adguard-metrics-scv
+      middlewares:
+        - allow-vpn-ips
 
 
   services:
-    pi-hole-svc:
+    adguard-scv:
       loadBalancer:
         servers:
-          - url: "http://pihole:80"
+          - url: "http://adguardhome:80"
+  
+    adguard-metrics-scv:
+      loadBalancer:
+        servers:
+          - url: "http://adguard-exporter:9617"
