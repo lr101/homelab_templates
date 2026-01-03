@@ -69,14 +69,14 @@
             - title: Home Assistant
               url: https://ha.thinkpad.lr-projects.de/auth/oidc/redirect
               icon: https://cdn.jsdelivr.net/gh/loganmarchione/homelab-svg-assets/assets/homeassistant.svg
-            - title: Pi-Hole Ionos (VPN)
-              url: https://pi-hole.ionos.lr-projects.de/admin/login
-              icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/pi-hole.svg
+            - title: Adguard Ionos
+              url: https://dns.ionos.lr-projects.de
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/adguard-home.svg
               alt-status-codes:
                 - 401
-            - title: Pi-Hole Medion (Home Network)
-              url: https://pi-hole.medion.lr-projects.de/admin/login
-              icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/pi-hole.svg
+            - title: Adguard Medion
+              url: https://dns.medion.lr-projects.de
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/adguard-home.svg
               alt-status-codes:
                 - 401
             - title: InfluxDB
@@ -97,8 +97,9 @@
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/traefik-proxy.svg
               alt-status-codes:
                 - 401
+
             - title: Nextcloud
-              url: https://nextcloud.thinkpad.lr-projects.de/login
+              url: https://nextcloud.medion.lr-projects.de/login
               icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/nextcloud-blue.svg
             - title: Minio Console
               url: https://minio-admin.thinkpad.lr-projects.de

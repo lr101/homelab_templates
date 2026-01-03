@@ -80,7 +80,8 @@ database_docker_volume: false
 # 
 # Defined as a dictionary, e.g.:
 # real_ips: ['10.10.0.0/24', '172.16.0.0/16']
-real_ips: 
+real_ips:
+- 10.217.236.0/24
 # 
 # Enable Key Connector (https://bitwarden.com/help/article/deploy-key-connector)
 enable_key_connector: false
