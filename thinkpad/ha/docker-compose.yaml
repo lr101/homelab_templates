@@ -18,3 +18,13 @@ services:
       - traefik.http.routers.ha.tls.certresolver=cloudflare
       - traefik.http.services.ha.loadbalancer.server.port=8123
       - "com.centurylinklabs.watchtower.enable=true"
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: mariadb
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"

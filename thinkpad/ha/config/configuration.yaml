@@ -18,6 +18,9 @@ http:
     - 10.217.236.3
     - 172.18.0.0/16
 
+recorder:
+  db_url: !secret db_url
+
 auth_oidc: 
   client_id: !secret sso_client_id
   client_secret: !secret sso_client_secret
@@ -32,8 +35,10 @@ auth_oidc:
     admin: home_assistant_admin
     user: home_assistant_users
 
+
+
 rest:
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/DHT_TEMP_01/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/DHT_TEMP_01/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -43,8 +48,11 @@ rest:
       - name: "Wohnzimmer (Fernseher)"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.DHT_TEMP_01"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/DHT_HUMID_01/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/DHT_HUMID_01/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -54,8 +62,11 @@ rest:
       - name: "Humidity"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "%"
+        unique_id: "temppi.DHT_HUMID_01"
+        device_class: humidity
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28ACA58A271901F2/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28ACA58A271901F2/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -65,8 +76,11 @@ rest:
       - name: "Pool"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.28ACA58A271901F2"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28505064271901D5/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28505064271901D5/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -76,8 +90,11 @@ rest:
       - name: "Buiten"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.28505064271901D5"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/2834F25A622001BC/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/2834F25A622001BC/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -87,8 +104,11 @@ rest:
       - name: "Maxim Dachboden"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.2834F25A622001BC"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28AE09BD622001DB/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28AE09BD622001DB/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -98,8 +118,11 @@ rest:
       - name: "Maxim Inverter"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.28AE09BD622001DB"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/285E618931210327/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/285E618931210327/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -109,8 +132,11 @@ rest:
       - name: "Slaapkamer deur"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.285E618931210327"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/281C29AC3121031A/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/281C29AC3121031A/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -120,8 +146,11 @@ rest:
       - name: "Slaapkamer raam"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.281C29AC3121031A"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/284F6DA93121031A/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/284F6DA93121031A/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -131,8 +160,11 @@ rest:
       - name: "Kelder"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.284F6DA93121031A"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28C529A9312103C9/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28C529A9312103C9/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -142,8 +174,11 @@ rest:
       - name: "Buiten2"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.28C529A9312103C9"
+        device_class: temperature
+        state_class: measurement
 
-  - resource: "http://192.168.0.82:8081/rest/v1/sensors/28D44D9631210379/entry"
+  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28D44D9631210379/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -153,3 +188,6 @@ rest:
       - name: "Woonkamer (Sofa)"
         value_template: "{{ value_json[0].value }}"
         unit_of_measurement: "°C"
+        unique_id: "temppi.28D44D9631210379"
+        device_class: temperature
+        state_class: measurement
