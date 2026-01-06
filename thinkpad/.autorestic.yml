@@ -28,27 +28,6 @@ global:
     keep-yearly: 7
     retry-lock: 10
 locations:
-  bitwarden:
-    from:
-    - ./bitwarden
-    type: ""
-    to:
-    - drive
-    - nas
-    hooks:
-      dir: ""
-      prevalidate: []
-      before: []
-      after: []
-      success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status
-        success
-      failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service bitwarden --status
-        failure
-    cron: ""
-    options: {}
-    copyoption: {}
   docker-tags:
     from:
     - ./.backup
@@ -107,8 +86,12 @@ locations:
     hooks:
       dir: ""
       prevalidate: []
-      before: []
-      after: []
+      before:
+      - docker exec -u root mariadb apt update
+      - docker exec -u root mariadb apt install -y mysql-client
+      - set -a;source ha/.env;set +a;docker exec -e MYSQL_PWD="$MARIADB_PASSWORD" mariadb mysqldump --single-transaction --column-statistics=0 -h localhost -u ha  homeassistant > ./ha/backup/homeassistant.bak
+      after:
+      - unset $(grep -v '^#' ha/.env | sed -E 's/(.*)=.*/\1/' | xargs)
       success:
       - python3 ../scripts/influx-hook.py --host thinkpad --service ha --status success
       failure:
