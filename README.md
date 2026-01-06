@@ -8,7 +8,6 @@ This repository contains setup templates and configuration files for various app
 
 | Name                 | Description                    | Domain                          | Backup Solution | Update Solution                   | SSO Integration                    |
 | -------------------- | ------------------------------ | ------------------------------- | --------------- | --------------------------------- | ---------------------------------- |
-| Bitwarden            | Password manager               | bitwarden.lr-projects.de        | ✅         | `cron`                            | must be standalone                 |
 | Glance               | System monitoring dashboard    | home.lr-projects.de             | ✅         | `watchtower` - tag: `latest`      | -                                  |
 | Home Assistant       | Home automation platform       | ha.thinkpad.lr-projects.de      | ✅         | `watchtower` - tag: `stable`      | ✅                                  |
 | Telegraf             | Metric collector               | -                               | -               | `watchtower` - tag: `1.31-alpine` | -                                  |

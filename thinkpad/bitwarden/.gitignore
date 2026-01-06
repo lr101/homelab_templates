@@ -1,4 +1,0 @@
-bwdata/**
-backup/**
-
-!bwdata/config.yml
