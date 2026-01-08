@@ -17,6 +17,8 @@ entryPoints:
     address: :443
     forwardedHeaders:
       insecure: true
+      trustedIPs:
+        - 10.217.236.0/24
 providers:
   docker:
     exposedByDefault: false

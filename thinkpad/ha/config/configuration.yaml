@@ -38,7 +38,7 @@ auth_oidc:
 
 
 rest:
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/DHT_TEMP_01/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/DHT_TEMP_01/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -52,7 +52,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/DHT_HUMID_01/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/DHT_HUMID_01/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -66,7 +66,7 @@ rest:
         device_class: humidity
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28ACA58A271901F2/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28ACA58A271901F2/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -80,7 +80,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28505064271901D5/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28505064271901D5/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -94,7 +94,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/2834F25A622001BC/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/2834F25A622001BC/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -108,7 +108,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28AE09BD622001DB/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28AE09BD622001DB/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -122,7 +122,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/285E618931210327/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/285E618931210327/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -136,7 +136,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/281C29AC3121031A/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/281C29AC3121031A/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -150,7 +150,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/284F6DA93121031A/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/284F6DA93121031A/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -164,7 +164,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28C529A9312103C9/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28C529A9312103C9/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
@@ -178,7 +178,7 @@ rest:
         device_class: temperature
         state_class: measurement
 
-  - resource: "http://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28D44D9631210379/entry"
+  - resource: "https://temppi.thinkpad.lr-projects.de/rest/v1/sensors/28D44D9631210379/entry"
     params:
       date2: "{{ (now() - timedelta(seconds=20)).isoformat() }}"
       limit: 1
