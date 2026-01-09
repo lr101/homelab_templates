@@ -48,20 +48,13 @@ locations:
     hooks:
       dir: ""
       prevalidate: []
-      before:
-      - |
-        docker ps -q | while read cid; do
-          cname=$(docker inspect -f '{{.Name}}' "$cid" | sed 's#^/##')
-          image=$(docker inspect -f '{{.Config.Image}}' "$cid")
-          digest=$(docker image inspect "$image" --format '{{index .RepoDigests 0}}' 2>/dev/null || echo "none")
-          printf "%s\t%s\t%s\n" "$cname" "$image" "$digest"
-        done > ./.backup/docker-tags.txt
+      before: /hooks/docker-tags-hook.sh
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service docker-tags --status
+      - python3 /hooks/influx-hook.py --host medion --service docker-tags --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service docker-tags --status
+      - python3 /hooks/influx-hook.py --host medion --service docker-tags --status
         failure
     cron: ""
     options: {}
@@ -80,10 +73,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service immich --status
+      - python3 /hooks/influx-hook.py --host medion --service immich --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service immich --status
+      - python3 /hooks/influx-hook.py --host medion --service immich --status
         failure
     cron: ""
     options:
@@ -107,10 +100,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service jellyfin --status
+      - python3 /hooks/influx-hook.py --host medion --service jellyfin --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service jellyfin --status
+      - python3 /hooks/influx-hook.py --host medion --service jellyfin --status
         failure
     cron: ""
     options: {}
@@ -129,10 +122,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service logging --status
+      - python3 /hooks/influx-hook.py --host medion --service logging --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service logging --status
+      - python3 /hooks/influx-hook.py --host medion --service logging --status
         failure
     cron: ""
     options:
@@ -164,10 +157,10 @@ locations:
       - docker exec nextcloud-nextcloud-1 /var/www/html/occ maintenance:mode  --off
       - unset $(grep -v '^#' nextcloud/.env | sed -E 's/(.*)=.*/\1/' | xargs)
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service nextcloud --status
+      - python3 /hooks/influx-hook.py --host medion --service nextcloud --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service nextcloud --status
+      - python3 /hooks/influx-hook.py --host medion --service nextcloud --status
         failure
     cron: ""
     options: {}
@@ -185,10 +178,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service pocketid --status
+      - python3 /hooks/influx-hook.py --host medion --service pocketid --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service pocketid --status
+      - python3 /hooks/influx-hook.py --host medion --service pocketid --status
         failure
     cron: ""
     options: {}
@@ -207,10 +200,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service stick-it-homepage
+      - python3 /hooks/influx-hook.py --host medion --service stick-it-homepage
         --status success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service stick-it-homepage
+      - python3 /hooks/influx-hook.py --host medion --service stick-it-homepage
         --status failure
     cron: ""
     options: {}
@@ -229,10 +222,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service traefik --status
+      - python3 /hooks/influx-hook.py --host medion --service traefik --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service traefik --status
+      - python3 /hooks/influx-hook.py --host medion --service traefik --status
         failure
     cron: ""
     options: {}
@@ -251,9 +244,9 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host medion --service adguard --status success
+      - python3 /hooks/influx-hook.py --host medion --service adguard --status success
       failure:
-      - python3 ../scripts/influx-hook.py --host medion --service adguard --status failure
+      - python3 /hooks/influx-hook.py --host medion --service adguard --status failure
     cron: ""
     options: {}
     copyoption: {}

@@ -1,0 +1,18 @@
+services:
+  autorestic:
+    build: .
+    container_name: autorestic
+    restart: unless-stopped
+    privileged: true                                # (Optional) Required for certain hooks and file access     
+    env_file: .env
+    environment:
+      - TZ=Europe/Berlin                            # Change to your timezone
+      - CRON_SCHEDULE=10 2 * * *                    # Cron schedule for backups (default: daily at 02:10)
+    volumes:
+      - ${DEVICE_FOLDER_PATH}:/data                 # Path to device-specific .autorestic.yml and content to back up
+      - ${LOCAL_BACKUP_PATH}:/backup                # Path to local backup storage
+      - ./logs:/var/log/autorestic                  # (Optional) Log files
+      - ./hooks:/hooks:ro                           # (Optional) Custom hooks
+      - /var/run/docker.sock:/var/run/docker.sock   # (Optional) Required for docker hooks like db backup
+      - ./rclone.conf:/root/.rclone.conf:ro         # (Optional) Rclone config file for rclone backends (like google drive)
+      - ~/.ssh:/root/.ssh:ro                        # (Optional) If you use SSH keys for SFTP  

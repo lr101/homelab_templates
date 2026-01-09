@@ -1,6 +1,7 @@
 **/.env
 swarm/**
-**/backup
+**/.backup
 **/.autorestic.lock.yml
 **/.autorestic.env
 **/.autorestic.yml.old
+**/.restore
