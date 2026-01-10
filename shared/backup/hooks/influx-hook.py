@@ -15,7 +15,7 @@ def load_env(path=".env"):
         script_dir = os.path.abspath(os.path.dirname(__file__))
         path = os.path.join(script_dir, path)
     if not os.path.exists(path):
-        print(f"⚠️  Warning: .env file not found at {path}")
+        print(f"Warning: .env file not found at {path}")
         return
 
     with open(path) as f:
@@ -32,7 +32,7 @@ def get_env_var(name):
     """Get environment variable or exit if missing."""
     value = os.getenv(name)
     if not value:
-        print(f"❌ Missing required environment variable: {name}")
+        print(f"Missing required environment variable: {name}")
         sys.exit(1)
     return value
 
@@ -64,11 +64,11 @@ def write_backup_status(host, service, success):
     try:
         with urllib.request.urlopen(req) as resp:
             if resp.status == 204:
-                print(f"✅ Wrote backup status for '{service}' on '{host}' ({status_text}).")
+                print(f"Wrote backup status for '{service}' on '{host}' ({status_text}).")
             else:
-                print(f"⚠️  Unexpected response: {resp.status}")
+                print(f"Unexpected response: {resp.status}")
     except urllib.error.HTTPError as e:
-        print(f"❌ HTTPError: {e.code} - {e.reason}")
+        print(f"HTTPError: {e.code} - {e.reason}")
         try:
             err_body = e.read().decode()
             print("Response:", err_body)
@@ -76,7 +76,7 @@ def write_backup_status(host, service, success):
             pass
         sys.exit(1)
     except urllib.error.URLError as e:
-        print(f"❌ URLError: {e.reason}")
+        print(f"URLError: {e.reason}")
         sys.exit(1)
 
 def parse_args():

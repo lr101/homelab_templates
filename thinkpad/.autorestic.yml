@@ -38,20 +38,13 @@ locations:
     hooks:
       dir: ""
       prevalidate: []
-      before:
-      - |
-        docker ps -q | while read cid; do
-          cname=$(docker inspect -f '{{.Name}}' "$cid" | sed 's#^/##')
-          image=$(docker inspect -f '{{.Config.Image}}' "$cid")
-          digest=$(docker image inspect "$image" --format '{{index .RepoDigests 0}}' 2>/dev/null || echo "none")
-          printf "%s\t%s\t%s\n" "$cname" "$image" "$digest"
-        done > ./.backup/docker-tags.txt
+      before: /hooks/docker-tags-hook.sh
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service docker-tags --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service docker-tags --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service docker-tags --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service docker-tags --status
         failure
     cron: ""
     options: {}
@@ -69,10 +62,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service glance --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service glance --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service glance --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service glance --status
         failure
     cron: ""
     options: {}
@@ -87,15 +80,12 @@ locations:
       dir: ""
       prevalidate: []
       before:
-      - docker exec -u root mariadb apt update
-      - docker exec -u root mariadb apt install -y mysql-client
-      - set -a;source ha/.env;set +a;docker exec -e MYSQL_PWD="$MARIADB_PASSWORD" mariadb mysqldump --single-transaction --column-statistics=0 -h localhost -u ha  homeassistant > ./ha/backup/homeassistant.bak
-      after:
-      - unset $(grep -v '^#' ha/.env | sed -E 's/(.*)=.*/\1/' | xargs)
+      - python3 /hooks/mariadb-hook.py mariadb homeassistant --folder ha
+      after: []
       success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service ha --status success
+      - python3 /hooks/influx-hook.py --host thinkpad --service ha --status success
       failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service ha --status failure
+      - python3 /hooks/influx-hook.py --host thinkpad --service ha --status failure
     cron: ""
     options: {}
     copyoption: {}
@@ -112,17 +102,17 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service monaserver --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service monaserver --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service monaserver --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service monaserver --status
         failure
     cron: ""
     options: {}
     copyoption: {}
   postgis:
     from:
-    - ./postgis/backup
+    - ./postgis
     type: ""
     to:
     - nas
@@ -131,17 +121,20 @@ locations:
       dir: ""
       prevalidate: []
       before:
-      - python3 ../scripts/postgres-hook.py stick-it-db postgres stickitprod tempserver
-        --backup-dir postgis/backup
+      - python3 /hooks/postgres-hook.py stick-it-db postgres stickitprod tempserver
+        --backup-dir postgis/.backup
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service postgis --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service postgis --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service postgis --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service postgis --status
         failure
     cron: ""
-    options: {}
+    options:
+      backup:
+        exclude:
+          - '/postgres-data/*'
     copyoption: {}
   tempserver:
     from:
@@ -156,10 +149,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service tempserver --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service tempserver --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service tempserver --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service tempserver --status
         failure
     cron: ""
     options: {}
@@ -177,10 +170,10 @@ locations:
       before: []
       after: []
       success:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service traefik --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service traefik --status
         success
       failure:
-      - python3 ../scripts/influx-hook.py --host thinkpad --service traefik --status
+      - python3 /hooks/influx-hook.py --host thinkpad --service traefik --status
         failure
     cron: ""
     options: {}
