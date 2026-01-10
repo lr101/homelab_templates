@@ -9,9 +9,10 @@ When adding a new device the following steps need to be taken:
 1. Create a new folder in the root of this repo and create an `.autorestic.yml` file.
 2. Add the backup plan. See [autorestic](https://autorestic.vercel.app/location) for more information.
 3. Create a `.env` file in this directory, containing the path to the new location. For example:
-    ```
-    DEVICE_FOLDER_PATH=/home/lr/homelab_templates/thinkpad
-    ```
+```conf
+DEVICE_FOLDER_PATH=/home/lr/homelab_templates/thinkpad # Path to the .autorestic.yml folder
+LOCAL_BACKUP_PATH=/home/lr/backup                         # Local backup location
+```
 4. Add the backend configurations. This depends on your setup:
 
 - **SFTP**
