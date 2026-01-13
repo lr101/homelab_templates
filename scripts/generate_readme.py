@@ -67,7 +67,7 @@ def get_watchtower_info(service_data: Dict) -> str:
         label_str = str(label)
         if 'com.centurylinklabs.watchtower.enable' in label_str:
             if 'false' not in label_str:
-                return "✅ `watchtower`"
+                return "✅"
     
     return "manual"
 
@@ -113,6 +113,10 @@ def process_device(device: str) -> Tuple[str, List[Dict]]:
     """Process all services for a device and return table data (one row per service)."""
     device_path = REPO_ROOT / device
     folder_to_backends = parse_autorestic(device)
+    
+    # Also check shared folder for backup status
+    shared_to_backends = parse_autorestic("shared")
+    folder_to_backends.update(shared_to_backends)
     
     services_data = []
     
@@ -160,6 +164,62 @@ def process_device(device: str) -> Tuple[str, List[Dict]]:
             }
             services_data.append(service_entry)
     
+    # Process shared folder for services deployed on this device
+    shared_path = REPO_ROOT / "shared"
+    if shared_path.exists():
+        for service_dir in sorted(shared_path.iterdir()):
+            if not service_dir.is_dir():
+                continue
+            if service_dir.name.startswith('.'):
+                continue
+            
+            compose_file = service_dir / "docker-compose.yml"
+            if not compose_file.exists():
+                compose_file = service_dir / "docker-compose.yaml"
+            if not compose_file.exists():
+                continue
+            
+            compose_data = parse_docker_compose(compose_file)
+            services = compose_data.get('services', {})
+            
+            # Create one row per service in shared folder
+            for service_name, service_data in services.items():
+                if not isinstance(service_data, dict):
+                    continue
+                
+                annotations = service_data.get('annotations', [])
+                
+                # Check if this service is deployed on this device
+                deployed_on = extract_annotation(annotations, 'deployed_on')
+                if not deployed_on:
+                    continue
+                
+                deployed_devices = [d.strip() for d in deployed_on.split(',')]
+                if device not in deployed_devices:
+                    continue
+                
+                # Extract metadata from annotations
+                description = extract_annotation(annotations, 'description') or "-"
+                sso = extract_annotation(annotations, 'sso')
+                
+                # Get other info
+                domain = extract_domain(service_data)
+                # For shared services, check the shared folder in backup
+                backup_status = get_backup_status(service_dir.name, folder_to_backends)
+                update_status = get_watchtower_info(service_data)
+                sso_status = "✅" if sso and sso.lower() == "true" else "-"
+                
+                service_entry = {
+                    'name': service_name.replace('-', ' ').replace('_', ' ').title(),
+                    'folder': f"shared/{service_dir.name}",
+                    'description': description,
+                    'domain': domain,
+                    'backup': backup_status,
+                    'update': update_status,
+                    'sso': sso_status,
+                }
+                services_data.append(service_entry)
+    
     return device, services_data
 
 
@@ -175,6 +235,8 @@ def generate_markdown_table(services: List[Dict]) -> str:
         name = service['name']
         description = service['description']
         domain = service['domain']
+        if domain != "-" and '$' not in domain:
+            domain = f"[{domain}](https://{domain})"
         backup = service['backup']
         update = service['update']
         sso = service['sso']

@@ -35,7 +35,7 @@ jobs:
           pip install pyyaml
 
       - name: Generate README
-        run: python scripts/generate_readme.py thinkpad medion ionos shared
+        run: python scripts/generate_readme.py thinkpad medion ionos
 
       - name: Check if README changed
         id: readme-diff

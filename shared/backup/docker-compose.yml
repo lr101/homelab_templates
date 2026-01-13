@@ -43,6 +43,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     annotations:
       - de.lr-projects.description=Restic backup metrics exporter
+      - de.lr-projects.deployed_on=medion,thinkpad
     restart: unless-stopped
 
 networks:

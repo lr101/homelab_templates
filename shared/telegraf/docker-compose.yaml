@@ -25,4 +25,5 @@ services:
       - /dev:/dev:ro
     annotations:
       - de.lr-projects.description=Telegraf monitoring agent
+      - de.lr-projects.deployed_on=medion,thinkpad,ionos
 

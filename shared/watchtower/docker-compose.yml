@@ -32,3 +32,4 @@ services:
       - /etc/localtime:/etc/localtime:ro
     annotations:
       - de.lr-projects.description=Automated Docker container updates
+      - de.lr-projects.deployed_on=medion,thinkpad,ionos
