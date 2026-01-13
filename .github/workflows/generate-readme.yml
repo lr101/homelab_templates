@@ -3,16 +3,11 @@ name: Generate README
 on:
   push:
     branches:
-      - main
+      - '*'
     paths:
-      - 'thinkpad/**/docker-compose.yml'
-      - 'thinkpad/**/docker-compose.yaml'
-      - 'medion/**/docker-compose.yml'
-      - 'medion/**/docker-compose.yaml'
-      - 'ionos/**/docker-compose.yml'
-      - 'ionos/**/docker-compose.yaml'
-      - 'thinkpad/.autorestic.yml'
-      - 'medion/.autorestic.yml'
+      - '**/docker-compose.yml'
+      - '**/docker-compose.yaml'
+      - '**/.autorestic.yml'
       - 'scripts/generate_readme.py'
       - 'scripts/README_TEMPLATE.md'
   workflow_dispatch:
