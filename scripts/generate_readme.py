@@ -35,7 +35,7 @@ def extract_annotation(annotations, key: str) -> str:
     return None
 
 
-def extract_domain(service_data: Dict) -> str:
+def extract_domains(service_data: Dict) -> list[str]:
     """Extract domain from traefik labels in a service."""
     labels = service_data.get('labels', [])
     
@@ -44,14 +44,15 @@ def extract_domain(service_data: Dict) -> str:
     else:
         label_list = labels if isinstance(labels, list) else []
     
+    matches = []
     for label in label_list:
         label_str = str(label)
         if 'traefik.http.routers' in label_str and 'rule=Host' in label_str:
             match = re.search(r'Host\(`([^`]+)`\)', label_str)
             if match:
-                return match.group(1)
+                matches.append(match.group(1))
     
-    return "-"
+    return matches if matches else ["-"]
 
 
 def get_watchtower_info(service_data: Dict) -> str:
@@ -176,7 +177,7 @@ def process_device(device: str) -> Tuple[str, List[Dict]]:
                 services_data.append({
                     'group': service_dir.name,
                     'name': service_name.replace('-', ' ').replace('_', ' ').title(),
-                    'domain': extract_domain(service_data),
+                    'domains': extract_domains(service_data),
                     'ports': extract_ports(service_data),  # New field
                     'backup': get_backup_status(service_dir.name, folder_to_backends),
                     'update': get_watchtower_info(service_data),
@@ -203,18 +204,22 @@ def generate_markdown_table(services: List[Dict], device: str) -> str:
         current_group = service['group']
         display_group = f"**{current_group}**" if current_group != last_group else ""
         
-        domain = service['domain']
-        if domain != "-" and '${DEVICE}' not in domain and "." in domain:
-            domain_text = domain.split(".")[0]
-            domain = f"[{domain_text}](https://{domain})"
-        elif '${DEVICE}' in domain and "." in domain:
-            domain_text = domain.split(".")[0]
-            link = domain.replace('${DEVICE}', device)
-            domain = f"[{domain_text}](https://{link})"
+        domain_insert = "-"
+        if service['domains'] != ["-"] and len(service['domains']) > 0:
+            domain_links = []
+            for domain in service['domains']:
+                if '${DEVICE}' not in domain and "." in domain:
+                    domain_text = domain.split(".")[0]
+                    domain_links.append(f"[{domain_text}](https://{domain})")
+                elif '${DEVICE}' in domain and "." in domain:
+                    domain_text = domain.split(".")[0]
+                    link = domain.replace('${DEVICE}', device)
+                    domain_links.append(f"[{domain_text}](https://{link})")
+            domain_insert = ", ".join(domain_links)
         ports = f"`{service['ports']}`" if service['ports'] else "-"
-            
+        
         table += (f"| {display_group} | {service['name']} | "
-                  f"{domain} | {ports} | {service['backup']} | {service['update']} | {service['sso']} |\n")
+                  f"{domain_insert} | {ports} | {service['backup']} | {service['update']} | {service['sso']} |\n")
         
         last_group = current_group
     

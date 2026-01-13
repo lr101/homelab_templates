@@ -12,8 +12,8 @@ This repository contains setup templates and configuration files for various app
 | **ha** | Homeassistant | [ha](https://ha.thinkpad.lr-projects.de) | - | ✅ | ✅ | ✅ |
 |  | Mariadb | - | `3306` | ✅ | manual | - |
 | **monaserver** | Stick It Server | [stick-it](https://stick-it.thinkpad.lr-projects.de) | - | ✅ | manual | - |
-|  | Minio | [minio](https://minio.thinkpad.lr-projects.de) | `9000, 9001` | ✅ | manual | - |
-| **postgis** | Db | - | `5432` | ✅ | ✅ | - |
+|  | Minio | [minio](https://minio.thinkpad.lr-projects.de), [minio-admin](https://minio-admin.thinkpad.lr-projects.de) | `9000, 9001` | ✅ | manual | - |
+| **postgis** | Db | - | - | ✅ | ✅ | - |
 | **tempserver** | Tempserver | [temppi](https://temppi.thinkpad.lr-projects.de) | `8081` | ✅ | manual | - |
 | **traefik** | Reverse Proxy | [traefik](https://traefik.thinkpad.lr-projects.de) | `443, 80` | ✅ | ✅ | ✅ |
 | **backup** | Autorestic | - | - | - | manual | - |

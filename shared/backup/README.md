@@ -10,13 +10,18 @@ When adding a new device the following steps need to be taken:
 2. Add the backup plan. See [autorestic](https://autorestic.vercel.app/location) for more information.
 3. Create a `.env` file in this directory, containing the path to the new location. For example:
 ```conf
+# Needed for autorestic
 DEVICE_FOLDER_PATH=/home/lr/homelab_templates/thinkpad # Path to the .autorestic.yml folder
-LOCAL_BACKUP_PATH=/home/lr/backup                         # Local backup location
+LOCAL_BACKUP_PATH=/home/lr/.backup                     # Local backup location
+
+# (Optional) Needed for restic metric exporter
+DEVICE=thinkpad                                        # The device it is running on -> Constructs the domain
+AUTORESTIC_LOCAL_RESTIC_PASSWORD=<SECRET_KEY>          # Will be created in step 5
 ```
 4. Add the backend configurations. This depends on your setup:
 
 - **SFTP**
-  - Mount .ssh key folder: `~/.ssh:/root/.ssh:ro`
+  - Mount .ssh key folder: `/home/{user}/.ssh:/root/.ssh:ro`
   - .autorestic.yml:
     ```yaml
     backends:
@@ -40,7 +45,7 @@ LOCAL_BACKUP_PATH=/home/lr/backup                         # Local backup locatio
     ```
 
 - **Local**
-  - Mount local backup dir: `~/backup:/backup`
+  - Mount local backup dir: `/home/{user}/.backup:/backup`
   - .autorestic.yml:
     ```yaml
     backends:
@@ -54,6 +59,7 @@ LOCAL_BACKUP_PATH=/home/lr/backup                         # Local backup locatio
 sudo docker compose run --rm autorestic autorestic -c /data/.autorestic.yml check
 ```
 This will check if your configuration is configured correctly, initializes the backends and generates the encryption keys. To commit the `.autorestic.yml` file to git, make sure to copy the generated keys into a `.autorestic.env` file next to it. Remomve the keys from the config and name the entries with the schema: `AUTORESTIC_<backend>_RESTIC_PASSWORD=...`.
+Also copy this value into the `./shared/backup/.env` file if you want to use the restic exporter. 
 
 6. Startup: `sudo docker compose up -d`
 

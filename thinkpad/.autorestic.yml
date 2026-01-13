@@ -19,6 +19,16 @@ backends:
       user: ""
       password: ""
     options: {}
+  local:
+    type: local
+    path: /backup
+    key: ""
+    requirekey: false
+    env: {}
+    rest:
+      user: ""
+      password: ""
+    options: {}
 global:
   forget:
     keep-daily: 4
@@ -33,6 +43,7 @@ locations:
     - ./.backup
     type: ""
     to:
+    - local
     - nas
     - drive
     hooks:
@@ -54,6 +65,7 @@ locations:
     - ./glance
     type: ""
     to:
+    - local
     - nas
     - drive
     hooks:
@@ -75,6 +87,7 @@ locations:
     - ./ha
     type: ""
     to:
+    - local
     - nas
     hooks:
       dir: ""
@@ -94,6 +107,7 @@ locations:
     - ./monaserver
     type: ""
     to:
+    - local
     - nas
     - drive
     hooks:
@@ -115,6 +129,7 @@ locations:
     - ./postgis
     type: ""
     to:
+    - local
     - nas
     - drive
     hooks:
@@ -141,6 +156,7 @@ locations:
     - ./tempserver
     type: ""
     to:
+    - local
     - nas
     - drive
     hooks:
@@ -162,6 +178,7 @@ locations:
     - ./traefik
     type: ""
     to:
+    - local
     - nas
     - drive
     hooks:
