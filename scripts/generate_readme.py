@@ -205,9 +205,12 @@ def generate_markdown_table(services: List[Dict], device: str) -> str:
         
         domain = service['domain']
         if domain != "-" and '${DEVICE}' not in domain and "." in domain:
-            domain = f"[{domain.split(".")[0]}](https://{domain})"
+            domain_text = domain.split(".")[0]
+            domain = f"[{domain_text}](https://{domain})"
         elif '${DEVICE}' in domain and "." in domain:
-            domain = f"[{domain.split(".")[0]}](https://{domain.replace('${DEVICE}', device)})"
+            domain_text = domain.split(".")[0]
+            link = domain.replace('${DEVICE}', device)
+            domain = f"[{domain_text}](https://{link})"
         ports = f"`{service['ports']}`" if service['ports'] else "-"
             
         table += (f"| {display_group} | {service['name']} | "
