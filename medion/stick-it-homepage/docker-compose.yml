@@ -4,17 +4,24 @@ services:
     container_name: stick-it-homepage
     working_dir: /app
     restart: unless-stopped
+    annotations:
+    - de.lr-projects.description=Landing page of the Stick-It app
+    - de.lr-projects.sso=false
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.stick-it-home.rule=Host(`stick-it-home.medion.lr-projects.de`)
-      - traefik.http.routers.stick-it-home.entrypoints=websecure
-      - traefik.http.routers.stick-it-home.tls=true
-      - traefik.http.routers.stick-it-home.tls.certresolver=cloudflare
-      - traefik.http.services.stick-it-home.loadbalancer.server.port=3000
-      - traefik.docker.network=frontend
+    - traefik.enable=true
+    - traefik.http.routers.stick-it-home.rule=Host(`stick-it-home.medion.lr-projects.de`)
+    - traefik.http.routers.stick-it-home.entrypoints=websecure
+    - traefik.http.routers.stick-it-home.tls=true
+    - traefik.http.routers.stick-it-home.tls.certresolver=cloudflare
+    - traefik.http.services.stick-it-home.loadbalancer.server.port=3000
+    - traefik.docker.network=frontend
     networks:
-      - frontend
-
+    - frontend
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
 networks:
   frontend:
     external: true

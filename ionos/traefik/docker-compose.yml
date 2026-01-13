@@ -5,41 +5,58 @@ services:
     restart: always
     env_file: .env
     ports:
-      - 443:443
-      - 80:80
+    - 443:443
+    - 80:80
+    annotations:
+    - de.lr-projects.description=Reverse Proxy (with https)
+    - de.lr-projects.sso=true
     networks:
-      - backend
+    - backend
     dns:
-      - 172.20.0.100
+    - 172.20.0.100
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+    - com.centurylinklabs.watchtower.enable=true
     volumes:
-      - ./traefik.yml:/etc/traefik/traefik.yaml:ro
-      - ./dynamic:/etc/traefik/dynamic
-      - ./certificates:/etc/traefik/certificates
-      - ./traefik-logs:/logs
-
+    - ./traefik.yml:/etc/traefik/traefik.yaml:ro
+    - ./dynamic:/etc/traefik/dynamic
+    - ./certificates:/etc/traefik/certificates
+    - ./traefik-logs:/logs
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: 200M
+        reservations:
+          cpus: '0.2'
+          memory: 128M
   crowdsec:
     image: crowdsecurity/crowdsec:latest
     container_name: crowdsec
     restart: unless-stopped
     env_file: .env
+    annotations:
+    - de.lr-projects.description=Security monitoring
+    - de.lr-projects.sso=false
     dns:
-      - 172.20.0.100
+    - 172.20.0.100
     networks:
-      - backend
+    - backend
     environment:
-      - BOUNCER_KEY_TRAEFIK=$CROWDSEC_BOUNCER_API_KEY
-      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
+    - BOUNCER_KEY_TRAEFIK=$CROWDSEC_BOUNCER_API_KEY
+    - COLLECTIONS=crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
     volumes:
-      - ./crowdsec/data:/var/lib/crowdsec/data
-      - ./crowdsec/etc:/etc/crowdsec
-      - ./traefik-logs:/var/log/traefik:ro
-      - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
-
+    - ./crowdsec/data:/var/lib/crowdsec/data
+    - ./crowdsec/etc:/etc/crowdsec
+    - ./traefik-logs:/var/log/traefik:ro
+    - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 128M
 networks:
   backend:
     external: true
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+      - subnet: 172.20.0.0/16

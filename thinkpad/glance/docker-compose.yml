@@ -4,20 +4,26 @@ services:
     image: glanceapp/glance:latest
     restart: unless-stopped
     volumes:
-      - ./config:/app/config
-      - ./assets:/app/assets
+    - ./config:/app/config
+    - ./assets:/app/assets
     networks:
-      - frontend
+    - frontend
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.home.rule=Host(`home.thinkpad.lr-projects.de`)
-      - traefik.http.routers.home.entrypoints=websecure
-      - traefik.http.routers.home.tls=true
-      - traefik.http.routers.home.tls.certresolver=cloudflare
-      - traefik.http.services.home.loadbalancer.server.port=8080
-      - traefik.docker.network=frontend
-      - com.centurylinklabs.watchtower.enable=true
-
+    - traefik.enable=true
+    - traefik.http.routers.home.rule=Host(`home.thinkpad.lr-projects.de`)
+    - traefik.http.routers.home.entrypoints=websecure
+    - traefik.http.routers.home.tls=true
+    - traefik.http.routers.home.tls.certresolver=cloudflare
+    - traefik.http.services.home.loadbalancer.server.port=8080
+    - traefik.docker.network=frontend
+    - com.centurylinklabs.watchtower.enable=true
+    annotations:
+    - de.lr-projects.description=System monitoring dashboard
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
 networks:
   frontend:
     external: true

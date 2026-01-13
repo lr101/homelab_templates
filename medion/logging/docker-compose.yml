@@ -9,91 +9,128 @@ services:
       DOCKER_INFLUXDB_INIT_ORG: lr-projects
       DOCKER_INFLUXDB_INIT_BUCKET: home
     volumes:
-      - ./influx/influx_data:/var/lib/influxdb2
-      - ./influx/influx_config:/etc/influxdb2
+    - ./influx/influx_data:/var/lib/influxdb2
+    - ./influx/influx_config:/etc/influxdb2
     networks:
-      - influxdb-network
-      - frontend
+    - influxdb-network
+    - frontend
     labels:
-      - traefik.enable=true
-      - traefik.docker.network=frontend
-      - traefik.http.routers.influx.rule=Host(`influx.medion.lr-projects.de`)
-      - traefik.http.routers.influx.entrypoints=websecure
-      - traefik.http.routers.influx.tls=true
-      - traefik.http.routers.influx.tls.certresolver=cloudflare
-      - traefik.http.services.influx.loadbalancer.server.port=8086
-      - "com.centurylinklabs.watchtower.enable=true"
-
+    - traefik.enable=true
+    - traefik.docker.network=frontend
+    - traefik.http.routers.influx.rule=Host(`influx.medion.lr-projects.de`)
+    - traefik.http.routers.influx.entrypoints=websecure
+    - traefik.http.routers.influx.tls=true
+    - traefik.http.routers.influx.tls.certresolver=cloudflare
+    - traefik.http.services.influx.loadbalancer.server.port=8086
+    - com.centurylinklabs.watchtower.enable=true
+    annotations:
+    - de.lr-projects.description=Time-series database
+    - de.lr-projects.sso=false
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 768M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
   grafana:
     image: grafana/grafana:latest
-    user: "0"
+    user: '0'
     restart: unless-stopped
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
-      - GF_SERVER_ROOT_URL=https://grafana.medion.lr-projects.de
+    - GF_SECURITY_ADMIN_USER=admin
+    - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+    - GF_SERVER_ROOT_URL=https://grafana.medion.lr-projects.de
     volumes:
-      - ./grafana:/var/lib/grafana
-      - ./grafana-config/grafana.ini:/etc/grafana/grafana.ini
+    - ./grafana:/var/lib/grafana
+    - ./grafana-config/grafana.ini:/etc/grafana/grafana.ini
     depends_on:
-      - influxdb
+    - influxdb
     networks:
-      - influxdb-network
-      - frontend
+    - influxdb-network
+    - frontend
     labels:
-      - traefik.enable=true
-      - traefik.docker.network=frontend
-      - traefik.http.routers.grafana.rule=Host(`grafana.medion.lr-projects.de`)
-      - traefik.http.routers.grafana.entrypoints=websecure
-      - traefik.http.routers.grafana.tls=true
-      - traefik.http.routers.grafana.tls.certresolver=cloudflare
-      - traefik.http.services.grafana.loadbalancer.server.port=3000
-      - "com.centurylinklabs.watchtower.enable=true"
-
+    - traefik.enable=true
+    - traefik.docker.network=frontend
+    - traefik.http.routers.grafana.rule=Host(`grafana.medion.lr-projects.de`)
+    - traefik.http.routers.grafana.entrypoints=websecure
+    - traefik.http.routers.grafana.tls=true
+    - traefik.http.routers.grafana.tls.certresolver=cloudflare
+    - traefik.http.services.grafana.loadbalancer.server.port=3000
+    - com.centurylinklabs.watchtower.enable=true
+    annotations:
+    - de.lr-projects.description=Alerting and monitoring of metric data
+    - de.lr-projects.sso=true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
   prometheus:
     image: prom/prometheus:latest
     restart: unless-stopped
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./prometheus/data:/prometheus
+    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    - ./prometheus/data:/prometheus
     command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
+    - --config.file=/etc/prometheus/prometheus.yml
+    - --storage.tsdb.path=/prometheus
     networks:
-      - influxdb-network
-      - frontend
+    - influxdb-network
+    - frontend
     labels:
-      - traefik.enable=true
-      - traefik.docker.network=frontend
-      - traefik.http.routers.prometheus.rule=Host(`prometheus.medion.lr-projects.de`)
-      - traefik.http.routers.prometheus.entrypoints=websecure
-      - traefik.http.routers.prometheus.tls=true
-      - traefik.http.routers.prometheus.tls.certresolver=cloudflare
-      - traefik.http.services.prometheus.loadbalancer.server.port=9090
-      - com.centurylinklabs.watchtower.enable=true
-      - traefik.http.routers.adguard.middlewares=oidc-auth@file
-
+    - traefik.enable=true
+    - traefik.docker.network=frontend
+    - traefik.http.routers.prometheus.rule=Host(`prometheus.medion.lr-projects.de`)
+    - traefik.http.routers.prometheus.entrypoints=websecure
+    - traefik.http.routers.prometheus.tls=true
+    - traefik.http.routers.prometheus.tls.certresolver=cloudflare
+    - traefik.http.services.prometheus.loadbalancer.server.port=9090
+    - com.centurylinklabs.watchtower.enable=true
+    - traefik.http.routers.adguard.middlewares=oidc-auth@file
+    annotations:
+    - de.lr-projects.description=Metric collection and alerting
+    - de.lr-projects.sso=false
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
   uptime-kuma:
     image: louislam/uptime-kuma:1
     restart: unless-stopped
     container_name: uptime-kuma
     volumes:
-      - ./uptime-kuma:/app/data
+    - ./uptime-kuma:/app/data
     networks:
-      - influxdb-network
-      - frontend
+    - influxdb-network
+    - frontend
     labels:
-      - traefik.enable=true
-      - traefik.docker.network=frontend
-      - traefik.http.routers.uptime.rule=Host(`uptime.medion.lr-projects.de`)
-      - traefik.http.routers.uptime.entrypoints=websecure
-      - traefik.http.routers.uptime.tls=true
-      - traefik.http.routers.uptime.tls.certresolver=cloudflare
-      - traefik.http.routers.uptime.service=uptime-srv
-      - traefik.http.services.uptime-srv.loadbalancer.server.port=3001
-      - traefik.http.routers.uptime.middlewares=oidc-auth@file
-      - "com.centurylinklabs.watchtower.enable=true"
-
+    - traefik.enable=true
+    - traefik.docker.network=frontend
+    - traefik.http.routers.uptime.rule=Host(`uptime.medion.lr-projects.de`)
+    - traefik.http.routers.uptime.entrypoints=websecure
+    - traefik.http.routers.uptime.tls=true
+    - traefik.http.routers.uptime.tls.certresolver=cloudflare
+    - traefik.http.routers.uptime.service=uptime-srv
+    - traefik.http.services.uptime-srv.loadbalancer.server.port=3001
+    - traefik.http.routers.uptime.middlewares=oidc-auth@file
+    - com.centurylinklabs.watchtower.enable=true
+    annotations:
+    - de.lr-projects.description=Uptime monitoring
+    - de.lr-projects.sso=true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
 networks:
   influxdb-network:
     external: true

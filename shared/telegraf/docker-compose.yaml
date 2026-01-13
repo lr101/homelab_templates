@@ -23,4 +23,6 @@ services:
       - /var/run/utmp:/var/run/utmp:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /dev:/dev:ro
+    annotations:
+      - de.lr-projects.description=Telegraf monitoring agent
 

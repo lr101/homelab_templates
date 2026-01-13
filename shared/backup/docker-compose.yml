@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     privileged: true                                # (Optional) Required for certain hooks and file access     
     env_file: .env
+    annotations:
+      - de.lr-projects.description=Automated backup solution with Restic
     environment:
       - TZ=Europe/Berlin                            # Change to your timezone
       - CRON_SCHEDULE=10 2 * * *                    # Cron schedule for backups (default: daily at 02:10)
@@ -16,3 +18,33 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock   # (Optional) Required for docker hooks like db backup
       - ./rclone.conf:/root/.rclone.conf:ro         # (Optional) Rclone config file for rclone backends (like google drive)
       - ~/.ssh:/root/.ssh:ro                        # (Optional) If you use SSH keys for SFTP  
+    
+  restic-exporter:
+    image: ngosang/restic-exporter
+    container_name: restic-exporter
+    env_file: .env
+    networks:
+      - frontend
+    volumes:
+      - ${LOCAL_BACKUP_PATH}:/data
+    environment:
+      - RESTIC_REPOSITORY=/data
+      - RESTIC_PASSWORD=${AUTORESTIC_LOCAL_RESTIC_PASSWORD}
+      - PROM_LISTEN_ADDRESS=:8001
+      - REFRESH_INTERVAL=21600                      # How often to refresh stats (in seconds)
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.routers.restic-exporter.rule=Host(`restic-metrics.${DEVICE}.lr-projects.de`)
+      - traefik.http.routers.restic-exporter.entrypoints=websecure
+      - traefik.http.routers.restic-exporter.tls=true
+      - traefik.http.routers.restic-exporter.tls.certresolver=cloudflare
+      - traefik.http.services.restic-exporter-svc.loadbalancer.server.port=8001
+      - "com.centurylinklabs.watchtower.enable=true"
+    annotations:
+      - de.lr-projects.description=Restic backup metrics exporter
+    restart: unless-stopped
+
+networks:
+  frontend:
+    external: true

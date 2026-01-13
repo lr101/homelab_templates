@@ -3,28 +3,40 @@ services:
     image: ghcr.io/pocket-id/pocket-id:v1
     restart: unless-stopped
     env_file: .env
+    annotations:
+    - de.lr-projects.description=SSO solution
+    - de.lr-projects.sso=false
     volumes:
-      - "./data:/app/data"
-    # Optional healthcheck
+    - ./data:/app/data
     healthcheck:
-      test: [ "CMD", "/app/pocket-id", "healthcheck" ]
+      test:
+      - CMD
+      - /app/pocket-id
+      - healthcheck
       interval: 1m30s
       timeout: 5s
       retries: 2
       start_period: 10s
     networks:
-      - frontend
+    - frontend
     labels:
-      - traefik.enable=true
-      - traefik.docker.network=frontend
-      - traefik.http.routers.sso.rule=Host(`sso.medion.lr-projects.de`)
-      - traefik.http.routers.sso.entrypoints=websecure
-      - traefik.http.routers.sso.tls=true
-      - traefik.http.routers.sso.tls.certresolver=cloudflare
-      - traefik.http.routers.sso.service=sso-scv
-      - traefik.http.services.sso-scv.loadbalancer.server.port=1411
-      - "com.centurylinklabs.watchtower.enable=true"
-
+    - traefik.enable=true
+    - traefik.docker.network=frontend
+    - traefik.http.routers.sso.rule=Host(`sso.medion.lr-projects.de`)
+    - traefik.http.routers.sso.entrypoints=websecure
+    - traefik.http.routers.sso.tls=true
+    - traefik.http.routers.sso.tls.certresolver=cloudflare
+    - traefik.http.routers.sso.service=sso-scv
+    - traefik.http.services.sso-scv.loadbalancer.server.port=1411
+    - com.centurylinklabs.watchtower.enable=true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
 networks:
   frontend:
     external: true
