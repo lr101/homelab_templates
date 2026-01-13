@@ -171,13 +171,11 @@ def process_device(device: str) -> Tuple[str, List[Dict]]:
                     if not deployed_on or device not in [d.strip() for d in deployed_on.split(',')]:
                         continue
 
-                description = extract_annotation(annotations, 'description') or "-"
                 sso = extract_annotation(annotations, 'sso')
                 
                 services_data.append({
                     'group': service_dir.name,
                     'name': service_name.replace('-', ' ').replace('_', ' ').title(),
-                    'description': description,
                     'domain': extract_domain(service_data),
                     'ports': extract_ports(service_data),  # New field
                     'backup': get_backup_status(service_dir.name, folder_to_backends),
@@ -191,14 +189,14 @@ def process_device(device: str) -> Tuple[str, List[Dict]]:
     return device, services_data
 
 
-def generate_markdown_table(services: List[Dict]) -> str:
+def generate_markdown_table(services: List[Dict], device: str) -> str:
     """Generate a markdown table with visual grouping and ports."""
     if not services:
         return ""
     
     # Table Header - Added 'Ports' column
-    table = "| Group | Name | Description | Domain | Ports | Backup | Update | SSO |\n"
-    table += "| :--- | :--- | :---------- | :----- | :--- | :----: | :----: | :--: |\n"
+    table = "| Group | Name  | Domain | Ports | Backup | Update | SSO |\n"
+    table += "| :--- | :---  | :----- | :--- | :----: | :----: | :--: |\n"
     
     last_group = None
     for service in services:
@@ -206,11 +204,13 @@ def generate_markdown_table(services: List[Dict]) -> str:
         display_group = f"**{current_group}**" if current_group != last_group else ""
         
         domain = service['domain']
-        if domain != "-" and '$' not in domain:
-            domain = f"[{domain}](https://{domain})"
+        if domain != "-" and '${DEVICE}' not in domain and "." in domain:
+            domain = f"[{domain.split(".")[0]}](https://{domain})"
+        elif '${DEVICE}' in domain and "." in domain:
+            domain = f"[{domain.split(".")[0]}](https://{domain.replace('${DEVICE}', device)})"
         ports = f"`{service['ports']}`" if service['ports'] else "-"
             
-        table += (f"| {display_group} | {service['name']} | {service['description']} | "
+        table += (f"| {display_group} | {service['name']} | "
                   f"{domain} | {ports} | {service['backup']} | {service['update']} | {service['sso']} |\n")
         
         last_group = current_group
@@ -233,7 +233,7 @@ def generate_tables(devices) -> str:
         device_name, services = process_device(device)
         
         if services:
-            table = generate_markdown_table(services)
+            table = generate_markdown_table(services, device_name)
             tables_content += table
             tables_content += "\n\n"
         else:
