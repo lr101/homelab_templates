@@ -18,28 +18,6 @@ This repository contains setup templates and configuration files for various app
 | Reverse Proxy | Traefik Reverse Proxy | traefik.thinkpad.lr-projects.de | ✅ | ✅ `watchtower` | ✅ |
 
 
-### Ionos
-
-| Name | Description | Domain | Backup | Update | SSO |
-| ---- | ----------- | ------ | ------ | ------ | --- |
-| Adguardhome Ionos | DNS for home network | - | - | ✅ `watchtower` | - |
-| Adguard Exporter | AdGuard Home metrics exporter | - | - | manual | - |
-| Pihole | DNS for vpn network | - | - | ✅ `watchtower` | ✅ |
-| Pihole Influxdb | Pi-hole metrics exporter to InfluxDB | - | - | ✅ `watchtower` | - |
-| Traefik | Reverse Proxy (with https) | - | - | ✅ `watchtower` | ✅ |
-| Crowdsec | Security monitoring | - | - | manual | - |
-
-
-### Shared
-
-| Name | Description | Domain | Backup | Update | SSO |
-| ---- | ----------- | ------ | ------ | ------ | --- |
-| Autorestic | Automated backup solution with Restic | - | - | manual | - |
-| Restic Exporter | Restic backup metrics exporter | restic-metrics.${DEVICE}.lr-projects.de | - | ✅ `watchtower` | - |
-| Telegraf | Telegraf monitoring agent | - | - | ✅ `watchtower` | - |
-| Watchtower | Automated Docker container updates | - | - | manual | - |
-
-
 ### Medion
 
 | Name | Description | Domain | Backup | Update | SSO |
@@ -65,15 +43,67 @@ This repository contains setup templates and configuration files for various app
 | Reverse Proxy | Reverse Proxy (with https) | traefik.medion.lr-projects.de | ✅ | ✅ `watchtower` | ✅ |
 
 
+### Ionos
+
+| Name | Description | Domain | Backup | Update | SSO |
+| ---- | ----------- | ------ | ------ | ------ | --- |
+| Adguardhome Ionos | DNS for home network | - | - | ✅ `watchtower` | - |
+| Adguard Exporter | AdGuard Home metrics exporter | - | - | manual | - |
+| Pihole | DNS for vpn network | - | - | ✅ `watchtower` | ✅ |
+| Pihole Influxdb | Pi-hole metrics exporter to InfluxDB | - | - | ✅ `watchtower` | - |
+| Traefik | Reverse Proxy (with https) | - | - | ✅ `watchtower` | ✅ |
+| Crowdsec | Security monitoring | - | - | manual | - |
+
+
+### Shared
+
+| Name | Description | Domain | Backup | Update | SSO |
+| ---- | ----------- | ------ | ------ | ------ | --- |
+| Autorestic | Automated backup solution with Restic | - | - | manual | - |
+| Restic Exporter | Restic backup metrics exporter | restic-metrics.${DEVICE}.lr-projects.de | - | ✅ `watchtower` | - |
+| Telegraf | Telegraf monitoring agent | - | - | ✅ `watchtower` | - |
+| Watchtower | Automated Docker container updates | - | - | manual | - |
+
+
 
 
 ## Homelab setup
 
-A wireguard server, running on a very cheap VPS with a public IP, is used to connect all devices in the homelab.
-This allows for (reverse) proxying of services running on the homelab to VPN clients. 
-This also allows for the nginx proxy, running on the public VPS, to expose specific services to the internet.
+The homelab uses a WireGuard VPN hosted on an Ionos VPS with a public IP to securely connect remote devices (thinkpad, medion, NAS, and mobile devices) in a private network. Services run on the thinkpad and medion laptops in my parents basement.
 
-![image](./images/setup.png)
+**Internet Access:** External clients connect via HTTPS to the public IP, where a Traefik reverse proxy routes requests to services running on the internal devices over the encrypted VPN tunnel.
+
+**Internal Access:** Clients connected to the VPN can directly access services without going through the reverse proxy, providing access to services that are not reachable from the outside.
+
+Network Architecture:
+
+```mermaid
+graph TB
+    subgraph Internet["🌐 Internet"]
+        Users["External Users<br/>VPN Clients"]
+    end
+    
+    subgraph Ionos["Ionos VPS - Public IP"]
+        PublicIP["Public IP Address"]
+        WGServer["WireGuard Server"]
+        NginxProxy["Nginx Reverse Proxy"]
+    end
+    
+    subgraph VPN["🔒 WireGuard VPN Network"]
+        TP["💻 Thinkpad<br/>Services: glance, ha,<br/>tempserver, postgis"]
+        MD["💾 Medion<br/>Services: immich, jellyfin,<br/>nextcloud, adguard + more"]
+        NAS["📦 NAS<br/>Backups & Storage"]
+        Mobile["📱 Mobile Devices"]
+    end
+    
+    Users -->|HTTPS| PublicIP
+    PublicIP --> NginxProxy
+    NginxProxy -->|Routes Services| WGServer
+    WGServer -->|Encrypted Tunnel| VPN
+    Mobile -.->|VPN Connection| WGServer
+```
+
+
 
 
 ## Purpose
@@ -81,8 +111,8 @@ This also allows for the nginx proxy, running on the public VPS, to expose speci
 The goal of this repository is to:
 - Maintain version control of configuration files
 - Document setup procedures
-- Enable quick recovery/redeployment of services
-- Share configurations across different environments
+- Backup setup procedures
+- Share deployment configs with friends :)
 
 ## Getting Started
 
