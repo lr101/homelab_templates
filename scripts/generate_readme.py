@@ -67,7 +67,7 @@ def get_watchtower_info(service_data: Dict) -> str:
         label_str = str(label)
         if 'com.centurylinklabs.watchtower.enable' in label_str:
             if 'false' not in label_str:
-                return "✅ `watchtower`"
+                return "✅"
     
     return "manual"
 
@@ -109,77 +109,111 @@ def get_backup_status(folder: str, folder_to_backends: Dict[str, list]) -> str:
     return "-"
 
 
+def extract_ports(service_data: Dict) -> str:
+    """Extract and format host ports from service data."""
+    ports = service_data.get('ports', [])
+    if not ports:
+        return ""
+    
+    exposed_ports = []
+    for p in ports:
+        if isinstance(p, str):
+            # Handles "8080:80" or "127.0.0.1:8080:80"
+            parts = p.split(':')
+            # The host port is usually the second to last element
+            if len(parts) >= 2:
+                exposed_ports.append(parts[-2])
+            else:
+                exposed_ports.append(parts[0])
+        elif isinstance(p, int):
+            # Handles simple integer port
+            exposed_ports.append(str(p))
+        elif isinstance(p, dict):
+            # Handles long-form: { published: 8080, target: 80 }
+            published = p.get('published')
+            if published:
+                exposed_ports.append(str(published))
+                
+    return ", ".join(sorted(set(exposed_ports))) if exposed_ports else ""
+
+
 def process_device(device: str) -> Tuple[str, List[Dict]]:
-    """Process all services for a device and return table data (one row per service)."""
+    """Process all services for a device and return table data."""
     device_path = REPO_ROOT / device
     folder_to_backends = parse_autorestic(device)
+    shared_to_backends = parse_autorestic("shared")
+    folder_to_backends.update(shared_to_backends)
     
     services_data = []
     
-    # Find all docker-compose files in subdirectories
-    for service_dir in sorted(device_path.iterdir()):
-        if not service_dir.is_dir():
-            continue
-        if service_dir.name.startswith('.'):
-            continue
-        
-        compose_file = service_dir / "docker-compose.yml"
-        if not compose_file.exists():
-            compose_file = service_dir / "docker-compose.yaml"
-        if not compose_file.exists():
-            continue
-        
-        compose_data = parse_docker_compose(compose_file)
-        services = compose_data.get('services', {})
-        
-        # Create one row per service
-        for service_name, service_data in services.items():
-            if not isinstance(service_data, dict):
+    def process_dir(directory: Path, is_shared: bool = False):
+        if not directory.exists():
+            return
+            
+        for service_dir in sorted(directory.iterdir()):
+            if not service_dir.is_dir() or service_dir.name.startswith('.'):
                 continue
             
-            annotations = service_data.get('annotations', [])
+            compose_file = next((service_dir / f for f in ["docker-compose.yml", "docker-compose.yaml"] if (service_dir / f).exists()), None)
+            if not compose_file:
+                continue
             
-            # Extract metadata from annotations
-            description = extract_annotation(annotations, 'description') or "-"
-            sso = extract_annotation(annotations, 'sso')
+            compose_data = parse_docker_compose(compose_file)
+            services = compose_data.get('services', {})
             
-            # Get other info
-            domain = extract_domain(service_data)
-            backup_status = get_backup_status(service_dir.name, folder_to_backends)
-            update_status = get_watchtower_info(service_data)
-            sso_status = "✅" if sso and sso.lower() == "true" else "-"
-            
-            service_entry = {
-                'name': service_name.replace('-', ' ').replace('_', ' ').title(),
-                'folder': service_dir.name,
-                'description': description,
-                'domain': domain,
-                'backup': backup_status,
-                'update': update_status,
-                'sso': sso_status,
-            }
-            services_data.append(service_entry)
+            for service_name, service_data in services.items():
+                if not isinstance(service_data, dict): continue
+                
+                annotations = service_data.get('annotations', [])
+                
+                if is_shared:
+                    deployed_on = extract_annotation(annotations, 'deployed_on')
+                    if not deployed_on or device not in [d.strip() for d in deployed_on.split(',')]:
+                        continue
+
+                description = extract_annotation(annotations, 'description') or "-"
+                sso = extract_annotation(annotations, 'sso')
+                
+                services_data.append({
+                    'group': service_dir.name,
+                    'name': service_name.replace('-', ' ').replace('_', ' ').title(),
+                    'description': description,
+                    'domain': extract_domain(service_data),
+                    'ports': extract_ports(service_data),  # New field
+                    'backup': get_backup_status(service_dir.name, folder_to_backends),
+                    'update': get_watchtower_info(service_data),
+                    'sso': "✅" if sso and sso.lower() == "true" else "-",
+                })
+
+    process_dir(device_path)
+    process_dir(REPO_ROOT / "shared", is_shared=True)
     
     return device, services_data
 
 
 def generate_markdown_table(services: List[Dict]) -> str:
-    """Generate a markdown table for the services."""
+    """Generate a markdown table with visual grouping and ports."""
     if not services:
         return ""
     
-    table = "| Name | Description | Domain | Backup | Update | SSO |\n"
-    table += "| ---- | ----------- | ------ | ------ | ------ | --- |\n"
+    # Table Header - Added 'Ports' column
+    table = "| Group | Name | Description | Domain | Ports | Backup | Update | SSO |\n"
+    table += "| :--- | :--- | :---------- | :----- | :--- | :----: | :----: | :--: |\n"
     
+    last_group = None
     for service in services:
-        name = service['name']
-        description = service['description']
-        domain = service['domain']
-        backup = service['backup']
-        update = service['update']
-        sso = service['sso']
+        current_group = service['group']
+        display_group = f"**{current_group}**" if current_group != last_group else ""
         
-        table += f"| {name} | {description} | {domain} | {backup} | {update} | {sso} |\n"
+        domain = service['domain']
+        if domain != "-" and '$' not in domain:
+            domain = f"[{domain}](https://{domain})"
+        ports = f"`{service['ports']}`" if service['ports'] else "-"
+            
+        table += (f"| {display_group} | {service['name']} | {service['description']} | "
+                  f"{domain} | {ports} | {service['backup']} | {service['update']} | {service['sso']} |\n")
+        
+        last_group = current_group
     
     return table
 

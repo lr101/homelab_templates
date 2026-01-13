@@ -7,6 +7,7 @@ services:
     env_file: .env
     annotations:
       - de.lr-projects.description=Automated backup solution with Restic
+      - de.lr-projects.deployed_on=medion,thinkpad
     environment:
       - TZ=Europe/Berlin                            # Change to your timezone
       - CRON_SCHEDULE=10 2 * * *                    # Cron schedule for backups (default: daily at 02:10)
@@ -43,6 +44,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     annotations:
       - de.lr-projects.description=Restic backup metrics exporter
+      - de.lr-projects.deployed_on=medion,thinkpad
     restart: unless-stopped
 
 networks:
