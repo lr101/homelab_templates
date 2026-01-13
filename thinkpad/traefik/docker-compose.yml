@@ -17,6 +17,9 @@ services:
       - traefik.http.services.api@internal.loadbalancer.server.port=8080
       - "com.centurylinklabs.watchtower.enable=true"
       - traefik.http.routers.traefik-dash.middlewares=oidc-auth@file
+    annotations:
+      - de.lr-projects.description=Traefik Reverse Proxy
+      - de.lr-projects.sso=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
@@ -27,8 +30,14 @@ services:
     networks:
       - frontend
       - influxdb-network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
 networks:
   frontend:
     external: true

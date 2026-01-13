@@ -2,41 +2,39 @@ services:
   stirling-pdf:
     image: stirlingtools/stirling-pdf:latest
     container_name: stirling_pdf
+    annotations:
+    - de.lr-projects.description=PDF processing
+    - de.lr-projects.sso=false
     environment:
-      - SYSTEM_DEFAULTLOCALE=de-DE
-      - SECURITY_ENABLELOGIN=false
-      - SYSTEM_GOOGLEVISIBILITY=false
-      - SYSTEM_CONNECTIONTIMEOUTMINUTES=5
-      - SERVER_FORWARD_HEADERS_STRATEGY=NATIVE
-
+    - SYSTEM_DEFAULTLOCALE=de-DE
+    - SECURITY_ENABLELOGIN=false
+    - SYSTEM_GOOGLEVISIBILITY=false
+    - SYSTEM_CONNECTIONTIMEOUTMINUTES=5
+    - SERVER_FORWARD_HEADERS_STRATEGY=NATIVE
     volumes:
-      - ./stirling-data/tessdata:/usr/share/tessdata
-      - ./stirling-data/configs:/configs
-      - ./stirling-data/logs:/logs
-      - ./stirling-data/customFiles:/customFiles:rw
-
+    - ./stirling-data/tessdata:/usr/share/tessdata
+    - ./stirling-data/configs:/configs
+    - ./stirling-data/logs:/logs
+    - ./stirling-data/customFiles:/customFiles:rw
     networks:
-      - frontend
-
+    - frontend
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.stirling.rule=Host(`pdf.lr-projects.de`)"
-      - "traefik.http.routers.stirling.entrypoints=websecure"
-      - "traefik.http.routers.stirling.tls=true"
-      - "traefik.http.routers.stirling.tls.certresolver=cloudflare"
-      - "traefik.http.services.stirling.loadbalancer.server.port=8080"
-      - "traefik.docker.network=frontend"
-
+    - traefik.enable=true
+    - traefik.http.routers.stirling.rule=Host(`pdf.lr-projects.de`)
+    - traefik.http.routers.stirling.entrypoints=websecure
+    - traefik.http.routers.stirling.tls=true
+    - traefik.http.routers.stirling.tls.certresolver=cloudflare
+    - traefik.http.services.stirling.loadbalancer.server.port=8080
+    - traefik.docker.network=frontend
     restart: unless-stopped
-    
     deploy:
       resources:
         limits:
-          memory: 2G
-          cpus: '2.0'
+          cpus: '0.5'
+          memory: 512M
         reservations:
-          memory: 1G
-
+          cpus: '0.25'
+          memory: 256M
 networks:
   frontend:
     external: true

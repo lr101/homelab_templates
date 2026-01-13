@@ -4,19 +4,29 @@ services:
     restart: unless-stopped
     container_name: stick-it-db
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+    - com.centurylinklabs.watchtower.enable=true
+    annotations:
+    - de.lr-projects.description=Stick It postgis database
+    - de.lr-projects.sso=false
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
-      - ./backup:/backup
+    - ./postgres-data:/var/lib/postgresql/data
+    - ./backup:/backup
     ports:
-      - 5432:5432
+    - 5432:5432
     env_file: ./.env
     environment:
-      - POSTGRES_PASSWORD=${PG_PASSWORD}
-      - POSTGRES_USER=${PG_USER}
+    - POSTGRES_PASSWORD=${PG_PASSWORD}
+    - POSTGRES_USER=${PG_USER}
     networks:
-      - db
-
+    - db
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
 networks:
   db:
     external: true

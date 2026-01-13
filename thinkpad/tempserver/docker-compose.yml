@@ -4,12 +4,14 @@ services:
     image: lrprojects/tempserver:1.0.0-SNAPSHOT
     restart: unless-stopped
     env_file: .env
+    annotations:
+    - de.lr-projects.description=Sensor Aggregation Server & UI
     ports:
-      - 8081:8080
+    - 8081:8080
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${PG_PSW}
-      DB_URL: "jdbc:postgresql://db:5432/tempserver"
+      DB_URL: jdbc:postgresql://db:5432/tempserver
       INFLUXDB_URL: https://influx.medion.lr-projects.de
       INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
       INFLUXDB_BUCKET: tempserver
@@ -19,19 +21,26 @@ services:
       MAX_THREADS: 5
       MAX_CONNECTIONS: 200
     networks:
-      - frontend
-      - db
+    - frontend
+    - db
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.tempserver.rule=Host(`temppi.thinkpad.lr-projects.de`)
-      - traefik.http.routers.tempserver.entrypoints=websecure
-      - traefik.http.routers.tempserver.tls=true
-      - traefik.http.routers.tempserver.tls.certresolver=cloudflare
-      - traefik.http.services.tempserver.loadbalancer.server.port=8080
-      - traefik.docker.network=frontend
+    - traefik.enable=true
+    - traefik.http.routers.tempserver.rule=Host(`temppi.thinkpad.lr-projects.de`)
+    - traefik.http.routers.tempserver.entrypoints=websecure
+    - traefik.http.routers.tempserver.tls=true
+    - traefik.http.routers.tempserver.tls.certresolver=cloudflare
+    - traefik.http.services.tempserver.loadbalancer.server.port=8080
+    - traefik.docker.network=frontend
+    deploy:
+      resources:
+        limits:
+          cpus: '1.25'
+          memory: 768M
+        reservations:
+          cpus: '0.75'
+          memory: 512M
 networks:
   frontend:
     external: true
   db:
     external: true
-
